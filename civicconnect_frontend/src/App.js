@@ -324,8 +324,116 @@ function ReportIssueForm({ user, onSuccess }) {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [err, setErr] = useState(null);
 
+  // Camera support state
+  const [showCamera, setShowCamera] = useState(false);
+  const [cameraAvailable, setCameraAvailable] = useState(false);
+  const [cameraPermission, setCameraPermission] = useState(null); // null | 'granted' | 'denied'
+  const [stream, setStream] = useState(null);
+  const videoRef = React.useRef(null);
+  const canvasRef = React.useRef(null);
+
   const types = ['Pothole', 'Garbage', 'Lighting', 'Water', 'Noise', 'Other'];
 
+  // Check camera capabilities on mount
+  useEffect(() => {
+    // Check camera support (for modern browsers)
+    if (
+      navigator.mediaDevices &&
+      typeof navigator.mediaDevices.getUserMedia === "function"
+    ) {
+      setCameraAvailable(true);
+    } else {
+      setCameraAvailable(false);
+    }
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  // We want to shutdown stream if unmounted or stream changes
+  }, [stream]);
+
+  // Turn on camera on user demand (not auto-activate for privacy)
+  function handleOpenCamera(e) {
+    e.preventDefault();
+    setErr(null);
+    if (!cameraAvailable || !navigator.mediaDevices?.getUserMedia) {
+      setErr('Camera is not supported on this device/browser.');
+      setShowCamera(false);
+      return;
+    }
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(mediaStream => {
+        setStream(mediaStream);
+        setShowCamera(true);
+        setCameraPermission('granted');
+        // Attach stream to video
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+        }
+      })
+      .catch(error => {
+        setErr('Camera access was denied or failed. Try file upload instead.');
+        setCameraPermission('denied');
+        setShowCamera(false);
+        setStream(null);
+      });
+  }
+
+  // Attach camera stream to video element when available
+  useEffect(() => {
+    if (showCamera && stream && videoRef.current) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [showCamera, stream]);
+
+  // Take photo from camera
+  function handleTakePhoto(e) {
+    e.preventDefault();
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      // Fit canvas to video
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      // Get base64 from canvas
+      const dataUrl = canvas.toDataURL('image/png');
+      setPhotoPreview(dataUrl);
+      setFile(null);
+      setShowCamera(false);
+      // Stop stream for privacy and battery
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        setStream(null);
+      }
+    }
+  }
+
+  // Cancel camera modal and shut camera
+  function handleCancelCamera(e) {
+    if (e) e.preventDefault();
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+    }
+    setShowCamera(false);
+  }
+
+  // Remove/cancel photo (reset preview and file)
+  function handleRemovePhoto(e) {
+    e.preventDefault();
+    setFile(null);
+    setPhotoPreview(null);
+    setShowCamera(false);
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+    }
+  }
+
+  // File input handler (fallback or user preference)
   function handlePhoto(e) {
     const f = e.target.files[0];
     setFile(f || null);
@@ -397,10 +505,57 @@ function ReportIssueForm({ user, onSuccess }) {
         </label>
         <label>
           Attach Photo
-          <input type="file" accept="image/*" onChange={handlePhoto} style={{marginTop:6}}/>
+          <div style={{display:'flex',flexDirection:'column', gap: 8}}>
+            {/* "Take Photo" for browser with camera, fallback file input always available */}
+            {(!photoPreview && cameraAvailable) && (
+              <button type="button" className="btn" style={{width:160,background:THEME['--base-light'],color:'#fff',marginBottom:6}}
+                    onClick={handleOpenCamera}>
+                📷 Take Photo
+              </button>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handlePhoto}
+              style={{marginTop:4}}
+              disabled={showCamera}
+            />
+            {photoPreview && (
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <img src={photoPreview} alt="Preview" style={{width:130,height:86,borderRadius:8,objectFit:'cover',margin:'6px 0 8px 0',border:'1px solid #444'}} />
+                <button type="button" className="btn" style={{background:'#555',color:'#eee',fontSize:'0.99em',padding:'5px 10px'}} onClick={handleRemovePhoto}>Remove</button>
+              </div>
+            )}
+          </div>
         </label>
-        {photoPreview && (
-          <img src={photoPreview} alt="Preview" style={{width:170,height:110,borderRadius:8,objectFit:'cover',margin:'6px 0 8px 0',border:'1px solid #444'}} />
+        {/* Camera modal for live capture */}
+        {showCamera && (
+          <div style={{
+            position:'fixed',top:0,left:0,width:'100vw',height:'100vh',
+            background:'rgba(0,0,0,0.85)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center'
+          }}>
+            <div style={{background:'#191a1c',borderRadius:12,padding:22,boxShadow:'0 8px 40px #000e',display:'flex',flexDirection:'column',alignItems:'center'}}>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                style={{width:320,maxWidth:'70vw',height:200,background:'#000',borderRadius:9,marginBottom:10,objectFit:'cover'}}
+              />
+              <div style={{display:'flex',gap:12,marginTop:3}}>
+                <button type="button" className="btn" style={{background:THEME['--base-light'],color:'#fff',fontWeight:'bold',fontSize:'1.09em'}} onClick={handleTakePhoto}>
+                  Capture
+                </button>
+                <button type="button" className="btn" style={{background:'#555',color:'#eee'}} onClick={handleCancelCamera}>
+                  Cancel
+                </button>
+              </div>
+              <div style={{marginTop:7,fontSize:'0.93em',color:'#ccc'}}>
+                Please allow camera permission to take a photo.
+              </div>
+              <canvas ref={canvasRef} style={{display:'none'}} />
+            </div>
+          </div>
         )}
         <label>
           Location (optional)
