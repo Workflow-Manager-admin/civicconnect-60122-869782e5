@@ -13,8 +13,12 @@ const validateEmail = email =>
   typeof email === 'string' && email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
 const validatePassword = pw => typeof pw === 'string' && pw.length >= 6;
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // THEME VARIABLES - Override via inline style
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 const THEME = {
   '--base-dark': '#000000',
@@ -23,9 +27,13 @@ const THEME = {
   '--accent': '#ffffff',
 };
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // DEMO-ONLY SESSION STORAGE LAYER
 // In real apps, use backend APIs.
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 function getSession() {
   return JSON.parse(window.localStorage.getItem('civic_session') || 'null');
@@ -81,8 +89,12 @@ const DEPARTMENTS = [
   { name: 'City Hall', email: 'info@civic.local' },
 ];
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // LAYOUT COMPONENTS
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 
 const Navbar = ({ session, onLogout, onNav, isAdmin }) => (
@@ -138,8 +150,12 @@ const Footer = () => (
   </footer>
 );
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // MAIN APP COMPONENT
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 function App() {
   // Routing & session
@@ -214,8 +230,12 @@ function App() {
   );
 }
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // HERO / LANDING PAGE
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 const Hero = ({ isLoggedIn, onReport, onAdmin }) => (
   <div className="hero">
@@ -240,8 +260,12 @@ const Hero = ({ isLoggedIn, onReport, onAdmin }) => (
   </div>
 );
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // AUTH: LOGIN & REGISTER
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 function LoginForm({ onLogin, onNavRegister }) {
   const [email, setEmail] = useState('');
@@ -311,8 +335,12 @@ function RegisterForm({ onRegister, onNavLogin }) {
   );
 }
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // ISSUE REPORTING WITH PHOTO & LOCATION
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 function ReportIssueForm({ user, onSuccess }) {
   const [description, setDesc] = useState('');
@@ -571,8 +599,12 @@ function ReportIssueForm({ user, onSuccess }) {
   );
 }
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // USER ISSUES STATUS VIEW
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 function UserIssues({ user }) {
   const [issues, setIssues] = useState([]);
@@ -613,8 +645,12 @@ function UserIssues({ user }) {
   );
 }
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // ADMIN DASHBOARD
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 function AdminDashboard() {
   const [issues, setIssues] = useState(loadIssues());
@@ -730,8 +766,12 @@ function EditStatusRow({ currentStatus, statusMsg, onSave, onCancel }) {
   );
 }
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // CONTACT & DEPARTMENTS
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 function ContactDepartments() {
   return (
@@ -756,8 +796,12 @@ function ContactDepartments() {
   );
 }
 
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 // ACCESS CONTROL SCREENS
+import React, { useState, useEffect } from 'react';
+
 // ==========================================
 function MustLogin({ onLogin }) {
   return (
