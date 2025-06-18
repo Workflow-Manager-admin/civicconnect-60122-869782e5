@@ -352,6 +352,14 @@ function ReportIssueForm({ user, onSuccess }) {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [err, setErr] = useState(null);
 
+  // For Google Maps API integration
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [address, setAddress] = useState('');
+  const [autocompleteObj, setAutocompleteObj] = useState(null);
+  const mapRef = React.useRef(null);
+  const autocompleteInputRef = React.useRef(null);
+  const [showMap, setShowMap] = useState(false);
+
   // Camera support state
   const [showCamera, setShowCamera] = useState(false);
   const [cameraAvailable, setCameraAvailable] = useState(false);
@@ -361,6 +369,80 @@ function ReportIssueForm({ user, onSuccess }) {
   const canvasRef = React.useRef(null);
 
   const types = ['Pothole', 'Garbage', 'Lighting', 'Water', 'Noise', 'Other'];
+
+  // DYNAMICALLY LOAD GOOGLE MAPS SCRIPT (if not already loaded)
+  useEffect(() => {
+    // Only try loading if not present
+    if (!window.google || !window.google.maps) {
+      const script = document.createElement('script');
+      script.src =
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyB5chbe-SAMPLE-KEY-ABC123456&libraries=places';
+        // NOTE: Dummy key used above, replace with actual project API key in production!
+      script.async = true;
+      script.onload = () => setScriptLoaded(true);
+      script.onerror = () => setScriptLoaded(false);
+      document.body.appendChild(script);
+    } else {
+      setScriptLoaded(true);
+    }
+    // No cleanup (script persists)
+  }, []);
+
+  // Initialize Autocomplete after script loaded
+  useEffect(() => {
+    // Only setup if script loaded and input present
+    if (scriptLoaded && autocompleteInputRef.current && window.google?.maps?.places) {
+      const auto = new window.google.maps.places.Autocomplete(autocompleteInputRef.current, {
+        fields: ["geometry", "formatted_address"],
+        types: ["geocode"] // Only geocodable addresses, not POIs
+      });
+      setAutocompleteObj(auto);
+      // Listen for address change
+      auto.addListener("place_changed", () => {
+        const place = auto.getPlace();
+        if (place.geometry && place.formatted_address) {
+          setCoords({
+            latitude: place.geometry.location.lat(),
+            longitude: place.geometry.location.lng()
+          });
+          setAddress(place.formatted_address);
+          setLocation(
+            `${place.geometry.location.lat()},${place.geometry.location.lng()}`
+          );
+          setShowMap(true);
+        }
+        else {
+          setErr("Could not get place location. Please select from the suggestions.");
+        }
+      });
+    }
+  }, [scriptLoaded]);
+
+  // Show the marker/map if coords present, after script is loaded
+  useEffect(() => {
+    if (
+      scriptLoaded &&
+      mapRef.current &&
+      coords &&
+      typeof coords.latitude === 'number' &&
+      typeof coords.longitude === 'number'
+    ) {
+      // Clean previous map instance
+      mapRef.current.innerHTML = '';
+      // Show the map (centered at coords)
+      const map = new window.google.maps.Map(mapRef.current, {
+        center: { lat: coords.latitude, lng: coords.longitude },
+        zoom: 16,
+      });
+      // Place a marker
+      new window.google.maps.Marker({
+        position: { lat: coords.latitude, lng: coords.longitude },
+        map,
+        title: address || location || 'Selected Location',
+      });
+      setShowMap(true);
+    }
+  }, [coords, scriptLoaded]);  
 
   // Check camera capabilities on mount
   useEffect(() => {
@@ -586,15 +668,82 @@ function ReportIssueForm({ user, onSuccess }) {
           </div>
         )}
         <label>
-          Location (optional)
-          <input value={location} readOnly placeholder="latitude,longitude" style={{marginLeft:10,marginTop:2}}/>
-          <button type="button" className="btn" style={{marginLeft:8,padding:'4px 10px',fontSize:'0.95em',background:THEME['--base-light']}} onClick={fetchLocation}>Use GPS</button>
+          Location/address
+          <input
+            type="text"
+            ref={autocompleteInputRef}
+            disabled={!scriptLoaded}
+            placeholder="Type address or search location"
+            style={{marginTop:6,width:'100%',maxWidth:350}}
+            value={address}
+            onChange={e => {
+              setAddress(e.target.value);
+              setLocation('');
+              setCoords(null);
+              setShowMap(false);
+            }}
+            autoComplete="off"
+            tabIndex="2"
+          />
+          <small style={{marginLeft: 8, color:'#9cc',fontSize: '0.91em'}}>
+            {scriptLoaded ? 'Autocomplete enabled' : 'Loading location search...'}
+          </small>
         </label>
+        <div style={{display:'flex',alignItems:'center',gap:10,marginTop:8}}>
+          <label style={{margin:0}}>Lat/Lng&nbsp;
+            <input
+              value={location || ''}
+              readOnly
+              placeholder="latitude,longitude"
+              style={{marginLeft:3,marginTop:2,width:190}}
+            />
+          </label>
+          <button
+            type="button"
+            className="btn"
+            style={{padding:'4px 12px',fontSize:'0.96em',background:THEME['--base-light'],color:'#fff'}}
+            disabled={!!coords}
+            onClick={fetchLocation}
+          >
+            Use GPS
+          </button>
+          <button
+            type="button"
+            className="btn"
+            style={{padding:'4px 8px',fontSize:'0.96em',background:'#666',color:'#fff'}}
+            disabled={!(location || address || coords)}
+            onClick={() => {
+              setCoords(null); setLocation(''); setAddress(''); setShowMap(false);
+            }}
+          >
+            Clear
+          </button>
+        </div>
+        {/* Map preview */}
+        {showMap && coords && (
+          <div style={{marginTop:18,marginBottom:8}}>
+            <div style={{fontSize:'0.96em',color:'#aaf',marginBottom:6}}>Selected Address: <b>{address || location}</b></div>
+            <div ref={mapRef} style={{width:'100%',maxWidth:380, height:220, borderRadius:9, border:'1px solid #555', margin:'0 auto 8px auto', background:'#eee'}}></div>
+          </div>
+        )}
         <button className="btn btn-large" style={{background:THEME['--base-light'],color:'#fff'}} disabled={submitLoading}>
           {submitLoading ? 'Submitting...' : 'Submit Issue'}
         </button>
         {err && <div style={{color:'red',marginTop:8}}>{err}</div>}
+        {!coords && address && scriptLoaded && (
+          <div style={{color:'#edb',fontSize:'0.97em',marginTop:4}}>
+            Select a suggestion for location to appear on map and in coordinates.
+          </div>
+        )}
       </form>
+      {/* User guidance */}
+      <div style={{marginTop:16,fontSize:'0.91em',color:'#777'}}>
+        <ul style={{listStyle:'disc',paddingLeft:25}}>
+          <li>You can type an address for suggestions or click "Use GPS" for your current location.</li>
+          <li>Your map marker will appear when a location is set.</li>
+          <li>If the map or address is not appearing, check your browser privacy/location/JS settings.</li>
+        </ul>
+      </div>
     </div>
   );
 }
