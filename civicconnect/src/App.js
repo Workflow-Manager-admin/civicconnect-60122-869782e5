@@ -224,6 +224,47 @@ function CivicConnectApp() {
 
   return (
     <div className="app" tabIndex={-1} style={mainGradient}>
+      {/* HEADER with "cityfix" site name - visually distinct, above nav */}
+      <header
+        style={{
+          width: "100%",
+          background: `linear-gradient(100deg, ${PALETTE.secondary} 40%, ${PALETTE.primary} 100%)`,
+          borderBottom: `2px solid ${PALETTE.border}`,
+          boxShadow: "0 2px 16px 0 #13290f33, 0 0 0 1.6px #57442dcc",
+          padding: "clamp(13px, 5vw, 28px) 0 14px 0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 200,
+          position: "relative"
+        }}
+      >
+        <h1
+          style={{
+            fontFamily: "inherit",
+            fontWeight: 1000,
+            fontSize: "clamp(2.5rem, 8vw, 4.8rem)",
+            letterSpacing: "0.04em",
+            color: PALETTE.accent,
+            textShadow: `0 3px 22px ${PALETTE.primary}60, 0 1.5px 10px #fff3`,
+            background: `linear-gradient(92deg, ${PALETTE.accent} 0%, #fff 55%, ${PALETTE.primary} 100%)`,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            lineHeight: 1.05,
+            textAlign: "center",
+            margin: 0,
+            padding: 0,
+            userSelect: "none",
+            width: "100%",
+            transition: "font-size 0.2s, color 0.2s"
+          }}
+          aria-label="cityfix homepage"
+        >
+          cityfix
+        </h1>
+      </header>
+      {/* NAVBAR - visually below header */}
       <Navbar
         user={user}
         nav={nav}
@@ -234,7 +275,8 @@ function CivicConnectApp() {
       />
       <main style={{
         flex: "1 0 auto",
-        marginTop: 80, marginBottom: 56,
+        marginTop: 80,
+        marginBottom: 56,
         minHeight: "calc(100dvh - 136px)",
         transition: "background 0.45s cubic-bezier(.63,.16,.49,1), color 0.3s",
         background: PALETTE.background
@@ -242,7 +284,7 @@ function CivicConnectApp() {
         <div
           className="container"
           style={{
-            background: "none", // let section backgrounds shine
+            background: "none",
             transition: "all 0.22s",
             boxShadow: "none"
           }}
@@ -257,7 +299,9 @@ function CivicConnectApp() {
         open={modal.open}
         title={modal.title}
         onClose={() => setModal({ ...modal, open: false })}
-        onConfirm={modal.onConfirm ? () => { modal.onConfirm(); setModal({ ...modal, open: false }); } : undefined}
+        onConfirm={
+          modal.onConfirm ? () => { modal.onConfirm(); setModal({ ...modal, open: false }); } : undefined
+        }
         colors={PALETTE}
       >
         {modal.content}
@@ -750,7 +794,7 @@ function Home({ nav, user }) {
   const smallScreen = windowWidth < BREAKPOINTS.tablet;
   const smallerGap = windowWidth < 800;
 
-  // Central "City" display - BIG, BOLD, RESPONSIVE, COLOR-THEMED
+  // Central hero section - now without main "City" title, which appears in site header
   return (
     <section
       className="hero"
@@ -769,41 +813,8 @@ function Home({ nav, user }) {
         margin: smallScreen ? "0 0 18px 0" : "0 0 30px 0",
         border: `1.4px solid ${theme.border}`,
       }}
-      aria-labelledby="city-hero-title"
+      aria-label="cityfix hero"
     >
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginBottom: smallScreen ? 0 : 4
-        }}
-      >
-        <h1
-          id="city-hero-title"
-          style={{
-            fontFamily: "inherit",
-            fontWeight: 1000,
-            fontSize: smallScreen ? "3rem" : "6vw",
-            lineHeight: 1.08,
-            margin: "0 auto",
-            color: theme.accent,
-            letterSpacing: ".01em",
-            textShadow: `0 7px 22px ${theme.primary}90, 0 1.5px 10px #fff3`,
-            background: `linear-gradient(90deg, ${theme.accent} 0%, #fff 55%, ${theme.primary} 90%)`,
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            textAlign: "center",
-            transition: "all 0.18s",
-            maxWidth: "100vw",
-            wordBreak: "break-word"
-          }}
-        >
-          City
-        </h1>
-      </div>
       <div
         style={{
           color: theme.primary,
