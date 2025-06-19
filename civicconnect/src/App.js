@@ -1132,21 +1132,117 @@ function AdminDashboard({ issues, onUpdateIssue, onDeleteIssue }) {
   );
 }
 
-// ============== Contact/Departments ===========
+/*
+ * PUBLIC_INTERFACE
+ * Contact & Departments page with visually distinct department cards;
+ * each card shows department icon, name, contact info. Responsive, dark theme, accessible.
+ */
 function ContactDepartments() {
+  // Department data as per requirements
+  const departments = [
+    { name: 'Roads', icon: '🛣️', phone: '123-000-1111', email: 'roads@civicconnect.org' },
+    { name: 'Electricity', icon: '💡', phone: '123-000-2222', email: 'electricity@civicconnect.org' },
+    { name: 'Water', icon: '🚰', phone: '123-000-3333', email: 'water@civicconnect.org' },
+    { name: 'Sewage', icon: '🕳️', phone: '123-000-4444', email: 'sewage@civicconnect.org' },
+    { name: 'Road Encroachment', icon: '🚧', phone: '123-000-5555', email: 'encroachment@civicconnect.org' },
+    { name: 'Parking', icon: '🅿️', phone: '123-000-6666', email: 'parking@civicconnect.org' }
+  ];
+
+  // Responsive grid for department cards
   return (
     <section>
-      <h2>Contact Information &amp; Departments</h2>
-      <div style={{margin:'16px 0'}}>
-        <b>General Inquiries:</b> <a href="mailto:info@civicconnect.com" style={{color:'#00ffff'}}>info@civicconnect.com</a>
+      <h2 style={{ textAlign: "center", marginBottom: 12 }}>Contact Information &amp; Departments</h2>
+      <div style={{
+        margin: '24px 0 18px 0',
+        background: "linear-gradient(90deg, #011a2f 0%, #13151a 100%)",
+        borderRadius: 12,
+        padding: "20px 18px",
+        boxShadow: "0 3px 32px #00baff10, 0 0 0 2.2px #00ffff33"
+      }}>
+        <b style={{ color: "#00ffff" }}>General Inquiries:</b> {" "}
+        <a href="mailto:info@civicconnect.com" style={{color:'#00ffff', fontWeight:500, wordBreak:"break-word"}}>
+          info@civicconnect.com
+        </a>
+        <div style={{ fontSize: 15, color:'#c9eaff', marginTop:6 }}>
+          For all other questions, use the departmental contacts below.
+        </div>
       </div>
-      <div>
-        <b>Departments</b>
-        <ul>
-          <li><b>Public Works:</b> <span style={{color:'#00ffff'}}>pw@civicconnect.com</span></li>
-          <li><b>Sanitation:</b> <span style={{color:'#00ffff'}}>sanitation@civicconnect.com</span></li>
-          <li><b>Water Department:</b> <span style={{color:'#00ffff'}}>water@civicconnect.com</span></li>
-        </ul>
+      <div
+        aria-label="Department Contacts"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(248px, 1fr))',
+          gap: '24px',
+          width: '100%',
+          margin: '0 auto',
+          padding: '10px 0 40px 0'
+        }}
+      >
+        {departments.map((dept) => (
+          <div
+            key={dept.name}
+            style={{
+              background: "linear-gradient(120deg, #0c0f14 0%, #11262e 90%)",
+              color: "#fff",
+              borderRadius: 11,
+              boxShadow: "0 2px 18px #00ffff15, 0 0 0 1.7px #0297a5cc",
+              padding: "20px 18px 20px 18px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              minHeight: 174,
+              transition: "box-shadow 0.17s, transform 0.18s",
+              border: "1.7px solid #00fff91e"
+            }}
+            tabIndex={0}
+            aria-label={dept.name + " department"}
+            role="region"
+          >
+            <span
+              aria-hidden="true"
+              style={{
+                fontSize: 38,
+                marginBottom: 12,
+                textShadow: "0 2px 20px #00fff541,0 0 1px #000"
+              }}
+              title={dept.name}
+            >{dept.icon}</span>
+            <span style={{
+              fontWeight: 700,
+              fontSize: 20,
+              color: "#00ffff",
+              marginBottom: 7,
+              textAlign: "center"
+            }}>
+              {dept.name}
+            </span>
+            <div style={{
+              color: "#bdf",
+              fontSize: 15,
+              marginBottom: 7,
+              wordBreak: "break-word",
+              textAlign: "center"
+            }}>
+              <span style={{fontWeight:500}}>Phone:</span>{" "}
+              <a href={'tel:' + dept.phone.replace(/[^0-9]/g, '')}
+                 style={{ color:'#2fd0e4', textDecoration:'underline', fontWeight:500 }}>
+                {dept.phone}
+              </a>
+            </div>
+            <div style={{
+              color: "#bdf",
+              fontSize: 15,
+              wordBreak: "break-word",
+              textAlign: "center"
+            }}>
+              <span style={{fontWeight:500}}>Email:</span>{" "}
+              <a href={'mailto:' + dept.email}
+                 style={{ color:'#2fd0e4', textDecoration:'underline', fontWeight:500 }}>
+                {dept.email}
+              </a>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
