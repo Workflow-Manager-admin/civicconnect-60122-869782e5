@@ -795,30 +795,72 @@ function LoginForm({ onLogin, nav }) {
   );
 }
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * Registration form for new users with validation and real-time feedback.
+ */
 function RegisterForm({ onRegister, nav }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  function validateFields() {
+    if (!username || !password) {
+      setError('All fields are required.');
+      return false;
+    }
+    if (username.length < 3 || password.length < 5) {
+      setError('Username must be at least 3 chars and password at least 5 chars long.');
+      return false;
+    }
+    setError('');
+    return true;
+  }
+
   function submit(e) {
     e.preventDefault();
-    if (!username || !password) return;
-    if (username.length < 3 || password.length < 5) {
-      alert('Username or password too short');
-      return;
-    }
+    if (!validateFields()) return;
     onRegister({ username, password });
   }
+
   return (
     <section>
       <h2>Register</h2>
-      <form onSubmit={submit} style={formStyle}>
-        <FormField label="Username" type="text" value={username}
-          onChange={e=>setUsername(e.target.value)} required />
-        <FormField label="Password" type="password" value={password}
-          onChange={e=>setPassword(e.target.value)} required />
+      <form onSubmit={submit} style={formStyle} autoComplete="off">
+        <FormField
+          label="Username"
+          type="text"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          required
+          autoFocus
+        />
+        <FormField
+          label="Password"
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+        />
         <button className="btn btn-large" type="submit">Register</button>
+        <button className="btn" type="button" style={{ marginLeft: 12 }} onClick={() => nav('home')}>
+          Cancel
+        </button>
       </form>
-      <p style={{marginTop:16}}>Already have an account? <button onClick={()=>nav('login')} className="btn" style={{padding: '4px 14px'}}>Login</button></p>
+      {error && (
+        <div style={{ color: '#ff7070', marginTop: 12, fontWeight: 500 }}>{error}</div>
+      )}
+      <p style={{ marginTop: 16 }}>
+        Already have an account?{' '}
+        <button
+          onClick={() => nav('login')}
+          className="btn"
+          style={{ padding: '4px 14px' }}
+          type="button"
+        >
+          Login
+        </button>
+      </p>
     </section>
   );
 }
