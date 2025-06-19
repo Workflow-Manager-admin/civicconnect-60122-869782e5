@@ -198,8 +198,15 @@ function CivicConnectApp() {
       mainContent = <Home nav={nav} user={user} />;
   }
 
+  // Gradient for main dark background
+  const mainGradient = {
+    background: 'linear-gradient(135deg, #000 0%, #1a0000 40%, #ff0000 100%)',
+    minHeight: "100dvh",
+    transition: "background 0.7s cubic-bezier(.77,.01,.46,1)",
+  };
+
   return (
-    <div className="app" tabIndex={-1} style={{ background: 'var(--base-dark)', minHeight: "100dvh" }}>
+    <div className="app" tabIndex={-1} style={mainGradient}>
       <Navbar
         user={user}
         nav={nav}
@@ -211,9 +218,9 @@ function CivicConnectApp() {
         flex: "1 0 auto",
         marginTop: 80, marginBottom: 56,
         minHeight: "calc(100dvh - 136px)",
-        transition: "background 0.3s, color 0.3s"
+        transition: "background 0.45s cubic-bezier(.63,.16,.49,1), color 0.3s"
       }}>
-        <div className="container" style={{ transition: "all 0.2s" }}>
+        <div className="container" style={{ transition: "all 0.22s" }}>
           {flash && <FlashMsg msg={flash} onClose={()=>setFlash('')}/>}
           {mainContent}
         </div>
@@ -245,27 +252,33 @@ function Button({
   ...props
 }) {
   // Visual variants, unified theme
+  // Brand-aligned gradient color theme for CTAs
   const color = {
     primary: {
-      background: "var(--base-light)",
-      color: "#131313"
+      background: "linear-gradient(90deg, #000 0%, #ff0000 88%, #fff 100%)",
+      color: "#fff",
+      border: "none",
+      boxShadow: "0 4px 18px #ff000055, 0 2px 5px #fff4"
     },
     secondary: {
-      background: "#22274f",
-      color: "#00ffff"
+      background: "linear-gradient(90deg, #232323 0%, #ff0000 90%)",
+      color: "#fff",
+      border: "1.5px solid #ff0000",
     },
     outlined: {
-      background: "transparent",
-      color: "#00ffff",
-      border: "1.5px solid #00ffff"
+      background: "linear-gradient(90deg, #fff 0%, #000 90%)",
+      color: "#000",
+      border: "2px solid #fff"
     },
     danger: {
-      background: "#ff294c",
-      color: "#fff"
+      background: "linear-gradient(100deg, #520000 0%, #ff0000 100%)",
+      color: "#fff",
+      border: "none"
     },
     success: {
-      background: "#1ad197",
-      color: "#0e1221"
+      background: "linear-gradient(90deg, #e0ffe2 0%, #43ff84 100%)",
+      color: "#103d13",
+      border: "none"
     }
   }[variant] || {};
   const sizeStyle = {
@@ -583,13 +596,17 @@ function FlashMsg({ msg, onClose }) {
 /**
  * Refined hero section with improved visual hierarchy, spacing, contrast, and accessible, branded buttons using new Button component.
  */
+/**
+ * PUBLIC_INTERFACE
+ * Home/Landing section with dark-gradient, responsive layout, and brand-aligned CTAs.
+ */
 function Home({ nav, user }) {
-  // -- Responsive breakpoints state (SSR-safe) --
-  const [windowWidth, setWindowWidth] = useState(undefined);
+  // Responsive window width
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1024
+  );
 
   useEffect(() => {
-    // Set initial width client-side only
-    setWindowWidth(typeof window !== "undefined" ? window.innerWidth : 1024);
     function handleResize() {
       setWindowWidth(window.innerWidth);
     }
@@ -597,8 +614,8 @@ function Home({ nav, user }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const smallScreen = windowWidth !== undefined ? windowWidth < 700 : false;
-  const smallerGap = windowWidth !== undefined ? windowWidth < 800 : false;
+  const smallScreen = windowWidth < 700;
+  const smallerGap = windowWidth < 800;
 
   return (
     <section
@@ -607,19 +624,27 @@ function Home({ nav, user }) {
         paddingTop: smallScreen ? 32 : 70,
         paddingBottom: smallScreen ? 36 : 64,
         textAlign: "center",
-        display: "flex", flexDirection: "column", alignItems: "center", gap: 27,
-        transition: "all 0.17s"
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 27,
+        transition: "all 0.17s",
+        background: "linear-gradient(120deg, #101010 0%, #550000 50%, #ff0000 120%)",
+        borderRadius: "24px",
+        boxShadow: "0 0 80px #ff0000a4, 0 2px 24px #0004",
+        margin: "0 0 38px 0",
       }}
       aria-labelledby="civicconnect-title"
     >
       <div
         className="subtitle"
         style={{
-          color: "#00e7e7",
-          fontWeight: 500,
-          fontSize: "1.17rem",
+          color: "#ff7070",
+          fontWeight: 600,
+          fontSize: "1.12rem",
           letterSpacing: 0.08,
-          marginBottom: 4
+          marginBottom: 4,
+          textShadow: "0 2px 12px #000"
         }}
       >
         Citizen Services Platform
@@ -628,13 +653,16 @@ function Home({ nav, user }) {
         id="civicconnect-title"
         className="title"
         style={{
-          color: "#00ffff",
-          fontSize: smallScreen ? "2.1rem" : "3.5rem",
-          fontWeight: 700,
-          lineHeight: 1.16,
+          background: "linear-gradient(94deg, #fff 0%, #ff0000 40%, #000 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+          fontSize: smallScreen ? "2.15rem" : "3.57rem",
+          fontWeight: 800,
+          lineHeight: 1.12,
           margin: 0,
           letterSpacing: ".01em",
-          textShadow: "0 2px 18px #09eaff33, 0 1px 1px #000"
+          textShadow: "0 2px 22px #ff000044, 0 1px 1px #000"
         }}
       >
         CivicConnect
@@ -642,21 +670,22 @@ function Home({ nav, user }) {
       <p
         className="description"
         style={{
-          fontSize: smallScreen ? "1rem" : "1.17rem",
+          fontSize: smallScreen ? "1rem" : "1.15rem",
           lineHeight: 1.6,
-          color: "#c7f9ff",
-          maxWidth: 600,
+          color: "#fff",
+          maxWidth: 610,
           margin: "0 auto 18px auto",
+          textShadow: "0 2px 13px #090909ee, 0 1px 1px #fff2",
           transition: "all 0.17s"
         }}
       >
         CivicConnect helps you report civic issues, track status, and connect with city departments.
         <br />
         {user
-          ? <span style={{ color: "#fff", fontWeight: 500 }}>
+          ? <span style={{ color: "#fff", fontWeight: 700 }}>
               Ready to make a difference in your community?
             </span>
-          : <span style={{ color: "#00ffff", fontWeight: 500 }}>
+          : <span style={{ color: "#ff0000", fontWeight: 700 }}>
               Register or log in to get started — your city at your fingertips!
             </span>
         }
@@ -674,7 +703,15 @@ function Home({ nav, user }) {
         <Button
           variant="primary"
           size="large"
-          style={{ minWidth: 165, fontWeight: 700 }}
+          style={{
+            minWidth: 165,
+            fontWeight: 700,
+            background: "linear-gradient(90deg, #ff2a2a 0%, #fff 75%, #ff0000 100%)",
+            color: "#000",
+            boxShadow: "0 5px 26px #ff0000a2, 0 2px 6px #fff5",
+            border: "none",
+            transition: "background 0.3s, color 0.3s",
+          }}
           onClick={() => nav('issue')}
         >
           Report an Issue
@@ -683,7 +720,14 @@ function Home({ nav, user }) {
           <Button
             variant="outlined"
             size="large"
-            style={{ minWidth: 165, fontWeight: 700 }}
+            style={{
+              minWidth: 165,
+              fontWeight: 700,
+              background: "linear-gradient(90deg, #000 0%, #333 93%, #ff0000 100%)",
+              color: "#fff",
+              border: "2.2px solid #ff0000",
+              boxShadow: "0 1px 14px #9e000051"
+            }}
             onClick={() => nav('status')}
           >
             View Your Reports
@@ -693,7 +737,14 @@ function Home({ nav, user }) {
             <Button
               variant="outlined"
               size="large"
-              style={{ minWidth: 130, fontWeight: 600 }}
+              style={{
+                minWidth: 130,
+                fontWeight: 600,
+                background: "linear-gradient(100deg, #fff 0%, #ff0000 85%)",
+                color: "#000",
+                border: "2.2px solid #fff",
+                boxShadow: "0 1px 9px #fff9",
+              }}
               onClick={() => nav('register')}
             >
               Register
@@ -701,7 +752,14 @@ function Home({ nav, user }) {
             <Button
               variant="outlined"
               size="large"
-              style={{ minWidth: 104, fontWeight: 600 }}
+              style={{
+                minWidth: 104,
+                fontWeight: 600,
+                background: "linear-gradient(120deg, #121212 0%, #ff0000 80%)",
+                color: "#fff",
+                border: "2.2px solid #ff0000",
+                boxShadow: "0 1px 7px #9003",
+              }}
               onClick={() => nav('login')}
             >
               Login
