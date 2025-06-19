@@ -1320,10 +1320,43 @@ function Footer({ nav }) {
   );
 }
 
-// ==================== Shared Subcomponents ====================
-const formStyle = { maxWidth: 340, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 18, background:'#051921b8',padding:'36px 16px', borderRadius:8, border:'1px solid #00ffff38' };
-const labelStyle = {color:'#fff',marginRight:8,fontWeight:500,display:'block',marginBottom:2};
-const inputStyle = {padding:'7px 8px',borderRadius:4,border:'1.5px solid #00ffff66',marginTop:1,minWidth:180,background:'#1a1a2b',color:'#fff'};
+/*
+ * Responsive and Accessible Shared Subcomponent Styles
+ *
+ * Applies grid/flex properties and adaptive sizing for cross-device UI consistency.
+ */
+const formStyle = {
+  maxWidth: "100%",
+  width: "min(98vw, 380px)",
+  margin: "0 auto",
+  display: "flex",
+  flexDirection: "column",
+  gap: "min(4vw,22px)",
+  background: "#051921b8",
+  padding: "clamp(24px, 8vw, 36px) clamp(10px, 4vw, 19px)",
+  borderRadius: 8,
+  border: "1px solid #00ffff38",
+  boxSizing: "border-box"
+};
+const labelStyle = {
+  color: "#fff",
+  marginRight: 8,
+  fontWeight: 500,
+  display: "block",
+  marginBottom: 2,
+  fontSize: "clamp(1rem, 1.3vw, 1.04rem)"
+};
+const inputStyle = {
+  padding: "7px 8px",
+  borderRadius: 4,
+  border: "1.5px solid #00ffff66",
+  marginTop: 1,
+  minWidth: 0,
+  width: "100%",
+  background: "#1a1a2b",
+  color: "#fff",
+  fontSize: "clamp(1rem, 3vw, 1.06rem)"
+};
 
 // PUBLIC_INTERFACE
 function FormField({ label, type, value, onChange, options, ...rest }) {
