@@ -243,21 +243,22 @@ function CivicConnectApp() {
           style={{
             fontFamily: "inherit",
             fontWeight: 1000,
-            fontSize: "clamp(2.5rem, 8vw, 4.8rem)",
-            letterSpacing: "0.04em",
+            fontSize: "clamp(2.1rem, 6vw, 3.65rem)", // smaller font size for header
+            letterSpacing: "0.09em",
             color: PALETTE.accent,
-            textShadow: `0 3px 22px ${PALETTE.primary}60, 0 1.5px 10px #fff3`,
+            textShadow: `0 2px 16px ${PALETTE.primary}55, 0 1.5px 10px #fff2`,
             background: `linear-gradient(92deg, ${PALETTE.accent} 0%, #fff 55%, ${PALETTE.primary} 100%)`,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
-            lineHeight: 1.05,
+            lineHeight: 1.07,
             textAlign: "center",
             margin: 0,
             padding: 0,
             userSelect: "none",
             width: "100%",
-            transition: "font-size 0.2s, color 0.2s"
+            transition: "font-size 0.2s, color 0.2s",
+            textTransform: "uppercase" // make header ALL CAPS
           }}
           aria-label="cityfix homepage"
         >
