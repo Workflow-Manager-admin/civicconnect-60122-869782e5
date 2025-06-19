@@ -15,7 +15,6 @@ function PageHome({ go, user }) {
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button className="btn btn-large" style={{ background: 'var(--secondary)' }} onClick={() => go('report')}>Report Issue</button>
           <button className="btn btn-large" onClick={() => go('myissues')} disabled={!user}>My Issues</button>
-          <button className="btn btn-large" onClick={() => go('admin')} disabled={!user || user.role !== 'admin'}>Admin</button>
         </div>
       </div>
     </div>
