@@ -535,44 +535,16 @@ function Navbar({ user, nav, onLogout, route, colors=PALETTE }) {
           }}
           aria-hidden="true"
         />
+        {/* Spacer for left alignment, prevents nav from hugging left edge */}
         <div
           style={{
             flex: '1 1 0%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
             minWidth: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
-        >
-          <span
-            style={{
-              fontFamily: "inherit",
-              fontWeight: 900,
-              fontSize: 'clamp(2rem, 6vw, 3.5rem)',
-              letterSpacing: "0.03em",
-              color: theme.accent,
-              background: `linear-gradient(90deg, ${theme.accent} 0%, #fff 55%, ${theme.primary} 90%)`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              lineHeight: 1.08,
-              textAlign: 'center',
-              textShadow: `0 3px 20px ${theme.primary}50`,
-              userSelect: 'none',
-              margin: 0,
-              padding: 0,
-              transition: 'font-size 0.2s, color 0.2s',
-              width: '100%',
-              display: 'block'
-            }}
-            aria-label="Go to homepage"
-            onClick={() => nav('home')}
-            role="button"
-            tabIndex={0}
-          >
-            City
-          </span>
-        </div>
+        />
         <div
           className="desktop-nav"
           style={{
