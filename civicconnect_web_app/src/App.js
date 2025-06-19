@@ -414,9 +414,7 @@ const fieldStyle = {
   marginBottom: 0
 };
 
-import GoogleMap from "./GoogleMap";
-
-// -------------------- ReportIssueForm --------------------
+ // -------------------- ReportIssueForm --------------------
 
 // PUBLIC_INTERFACE
 function ReportIssueForm({ onReport }) {
