@@ -25,50 +25,81 @@ function PageReportIssue({
     setShowLocationModal(true);
   };
 
-  // On modal Accept - attempt geolocation, update parent form with synthetic event
-  const onAcceptLocation = () => {
+  // Improved: Use Permissions API to check geolocation permission, retry as needed
+  const onAcceptLocation = async () => {
     setShowLocationModal(false);
     setLocating(true);
     setLocationErrorMsg("");
-    // Synthesize a change event for parent handler on success/fail to use same Redux/lifting logic.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const event = {
-            target: {
-              name: "location",
-              value: {
-                lat: pos.coords.latitude.toFixed(5),
-                lng: pos.coords.longitude.toFixed(5)
-              }
-            }
-          };
-          handleIssueFormChange(event);
-          setLocating(false);
-        },
-        (err) => {
-          setLocationErrorMsg("Location access denied.");
-          // Update using parent error mechanism
-          const event = {
-            target: {
-              name: "location",
-              value: { error: "Location access denied" }
-            }
-          };
-          handleIssueFormChange(event);
-          setLocating(false);
-        }
-      );
-    } else {
-      setLocationErrorMsg("Geolocation not supported.");
+    const updateLocation = (lat, lng) => {
       const event = {
         target: {
           name: "location",
-          value: { error: "Geolocation not supported" }
+          value: { lat, lng }
         }
       };
       handleIssueFormChange(event);
       setLocating(false);
+    };
+    const updateLocationError = (errorMsg) => {
+      setLocationErrorMsg(errorMsg);
+      const event = {
+        target: {
+          name: "location",
+          value: { error: errorMsg }
+        }
+      };
+      handleIssueFormChange(event);
+      setLocating(false);
+    };
+
+    // Optionally check permission state first for more reliable UX
+    if (navigator.permissions) {
+      try {
+        const perm = await navigator.permissions.query({ name: 'geolocation' });
+        if (perm.state === 'denied') {
+          updateLocationError("Location permission denied in browser settings.");
+          return;
+        }
+        // If prompt or granted, proceed
+      } catch { /* ignore */ }
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          // Defensive: check that coordinates are present
+          if (pos && pos.coords && typeof pos.coords.latitude === 'number' && typeof pos.coords.longitude === 'number') {
+            updateLocation(
+              pos.coords.latitude.toFixed(5),
+              pos.coords.longitude.toFixed(5)
+            );
+          } else {
+            updateLocationError("Failed to read geolocation coordinates.");
+          }
+        },
+        (err) => {
+          if (err && typeof err.code !== 'undefined') {
+            // See https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
+            if (err.code === 1)
+              updateLocationError("Location access denied by user.");
+            else if (err.code === 2)
+              updateLocationError("Position unavailable.");
+            else if (err.code === 3)
+              updateLocationError("Timed out while trying to get location.");
+            else
+              updateLocationError("Location access denied.");
+          } else {
+            updateLocationError("Location access denied.");
+          }
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000, // 10 seconds to avoid hanging forever
+          maximumAge: 30000 // Accept up to 30s old cached
+        }
+      );
+    } else {
+      updateLocationError("Geolocation not supported.");
     }
   };
 

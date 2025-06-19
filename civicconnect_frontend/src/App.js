@@ -128,6 +128,9 @@ function CivicConnectApp() {
     const { name, value, files } = e.target;
     if (name === 'photo') {
       setIssueForm({ ...issueForm, [name]: files[0] });
+    } else if (name === "location" && typeof value === "object") {
+      // Accepts object {lat, lng} or {error}
+      setIssueForm({ ...issueForm, location: value });
     } else {
       setIssueForm({ ...issueForm, [name]: value });
     }
