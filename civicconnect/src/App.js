@@ -236,7 +236,7 @@ function CivicConnectApp() {
           alignItems: "center",
           justifyContent: "center",
           zIndex: 200,
-          position: "relative"
+          // Remove relative, header is static flow
         }}
       >
         <h1
@@ -264,22 +264,34 @@ function CivicConnectApp() {
           cityfix
         </h1>
       </header>
-      {/* NAVBAR - visually below header */}
-      <Navbar
-        user={user}
-        nav={nav}
-        onLogout={logout}
-        route={route}
-        setRoute={setRoute}
-        colors={PALETTE}
-      />
+      {/* NAVBAR - visually below header (not overlapping) */}
+      <div style={{
+        width: "100%",
+        boxShadow: "0 2px 14px 0 #22271545",
+        zIndex: 101,
+        // Give margin between header and navbar
+        background: PALETTE.secondary,
+        borderBottom: `1.7px solid ${PALETTE.border}`,
+      }}>
+        <Navbar
+          user={user}
+          nav={nav}
+          onLogout={logout}
+          route={route}
+          setRoute={setRoute}
+          colors={PALETTE}
+          // remove position fixed by not adding custom class
+        />
+      </div>
       <main style={{
         flex: "1 0 auto",
-        marginTop: 80,
+        marginTop: 0,
         marginBottom: 56,
         minHeight: "calc(100dvh - 136px)",
         transition: "background 0.45s cubic-bezier(.63,.16,.49,1), color 0.3s",
-        background: PALETTE.background
+        background: PALETTE.background,
+        // add top padding: header + navbar
+        paddingTop: 0,
       }}>
         <div
           className="container"

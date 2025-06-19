@@ -28,8 +28,9 @@ body {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-color);
-  position: fixed;
-  top: 0;
+  /* Remove fixed positioning */
+  /* position: fixed; */
+  /* top: 0; */
   width: 100%;
   box-sizing: border-box;
   z-index: 100;
