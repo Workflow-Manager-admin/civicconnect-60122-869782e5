@@ -1,7 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
-// PUBLIC_INTERFACE
+/*
+  UI/UX Refactor Notes
+
+  - New reusable Button and Modal components
+  - Improved Navbar: more responsive, modern, animated
+  - Color/contrast updated for all elements following dark theme
+  - Modernized spacing; improved flex/grid layout usage
+  - Better feedback for actions: loading, disabling, subtle transitions
+  - Responsive design: layout and controls adapt at all breakpoints
+  - Accessibility: improved labelling, focus states, ARIA for modals/menus
+  - All components styled primarily with modern CSS-in-JS inline (fallbacks remain className for main theme)
+  - Visual polish increased for feedback, overlay, and interactions
+*/
+
+/**
+ * PUBLIC_INTERFACE
+ * Main CivicConnect App (UI/UX refactor)
+ */
 function CivicConnectApp() {
   // Auth/session state
   const [user, setUser] = useState(() => {
@@ -13,11 +30,11 @@ function CivicConnectApp() {
       return null;
     }
   });
+
   // "user": {username, isAdmin: boolean}
-  const [route, setRoute] = useState('home'); // home | login | register | issue | status | admin | contact
+  const [route, setRoute] = useState('home');
   const [flash, setFlash] = useState('');
   const [issues, setIssues] = useState(() => {
-    // Array<issue>
     try {
       const val = localStorage.getItem('issues');
       return val ? JSON.parse(val) : [];
@@ -25,6 +42,9 @@ function CivicConnectApp() {
       return [];
     }
   });
+
+  // Modal state (for confirmation dialogs, reusable elsewhere)
+  const [modal, setModal] = useState({ open: false, title: "", content: null, onConfirm: null });
 
   // =========== Session Convenience ============
   useEffect(() => {
@@ -88,7 +108,7 @@ function CivicConnectApp() {
     setRoute('home');
   }
 
-  // ========== Issue Helpers ===================
+  // ======= Issue Helpers =======
   function handleReportIssue(issueData) {
     // issueData: { title, desc, type, location, photo }
     const newIssue = {
@@ -114,8 +134,22 @@ function CivicConnectApp() {
   }
 
   function handleDeleteIssue(issueId) {
-    setIssues(issues.filter((iss) => iss.id !== issueId));
-    setFlash('Issue deleted.');
+    // Use modal for confirmation
+    setModal({
+      open: true,
+      title: "Delete Issue",
+      content: (
+        <div>
+          Are you sure you want to delete this issue? <br />
+          This action <b>cannot</b> be undone.
+        </div>
+      ),
+      onConfirm: () => {
+        setIssues(issues.filter((iss) => iss.id !== issueId));
+        setFlash('Issue deleted.');
+        setModal({ ...modal, open: false }); // close
+      }
+    });
   }
 
   // =========== Render Routing =============
@@ -165,7 +199,7 @@ function CivicConnectApp() {
   }
 
   return (
-    <div className="app">
+    <div className="app" tabIndex={-1} style={{ background: 'var(--base-dark)', minHeight: "100dvh" }}>
       <Navbar
         user={user}
         nav={nav}
@@ -173,36 +207,213 @@ function CivicConnectApp() {
         route={route}
         setRoute={setRoute}
       />
-      <main style={{flex: "1 0 auto", marginTop: 80, marginBottom: 56}}>
-        <div className="container">
-          {flash && <FlashMsg msg={flash}/>}
+      <main style={{
+        flex: "1 0 auto",
+        marginTop: 80, marginBottom: 56,
+        minHeight: "calc(100dvh - 136px)",
+        transition: "background 0.3s, color 0.3s"
+      }}>
+        <div className="container" style={{ transition: "all 0.2s" }}>
+          {flash && <FlashMsg msg={flash} onClose={()=>setFlash('')}/>}
           {mainContent}
         </div>
       </main>
       <Footer nav={nav} />
+      {/* Universal modal for confirmations, alerts, onboarding etc */}
+      <Modal
+        open={modal.open}
+        title={modal.title}
+        onClose={() => setModal({ ...modal, open: false })}
+        onConfirm={modal.onConfirm ? () => { modal.onConfirm(); setModal({ ...modal, open: false }); } : undefined}
+      >
+        {modal.content}
+      </Modal>
+    </div>
+  );
+}
+
+// ======== Universal Action Button & Modal ==========
+// PUBLIC_INTERFACE
+function Button({
+  children,
+  onClick,
+  type = "button",
+  variant = "primary",
+  size = "medium",
+  disabled = false,
+  style = {},
+  ...props
+}) {
+  // Visual variants, unified theme
+  const color = {
+    primary: {
+      background: "var(--base-light)",
+      color: "#131313"
+    },
+    secondary: {
+      background: "#22274f",
+      color: "#00ffff"
+    },
+    outlined: {
+      background: "transparent",
+      color: "#00ffff",
+      border: "1.5px solid #00ffff"
+    },
+    danger: {
+      background: "#ff294c",
+      color: "#fff"
+    },
+    success: {
+      background: "#1ad197",
+      color: "#0e1221"
+    }
+  }[variant] || {};
+  const sizeStyle = {
+    small: { padding: "6px 14px", fontSize: "0.96rem" },
+    medium: { padding: "10px 22px", fontSize: "1.05rem" },
+    large: { padding: "14px 30px", fontSize: "1.13rem" }
+  }[size] || {};
+
+  return (
+    <button
+      type={type}
+      className="btn"
+      tabIndex={0}
+      disabled={disabled}
+      style={{
+        borderRadius: 6,
+        boxShadow: disabled ? "none" : "0 0 0 1.7px #10b6d9, 0 2px 8px 0 #002f50b0",
+        opacity: disabled ? 0.62 : 1,
+        outline: "none",
+        border: "none",
+        fontWeight: 600,
+        letterSpacing: 0.05,
+        transition: "background-color 0.2s, color 0.2s, box-shadow 0.2s",
+        cursor: disabled ? "not-allowed" : "pointer",
+        ...color,
+        ...sizeStyle,
+        ...style,
+      }}
+      aria-disabled={!!disabled}
+      onClick={disabled ? undefined : onClick}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
+
+// PUBLIC_INTERFACE
+function Modal({ open, title, onClose, onConfirm, children }) {
+  // Animation and focus for accessibility
+  const modalRef = useRef(null);
+  useEffect(() => {
+    if (open && modalRef.current) {
+      modalRef.current.focus();
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+  if (!open) return null;
+  // Esc key closes modal
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "Escape" && onClose) onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={title || "Dialog"}
+      tabIndex={-1}
+      style={{
+        position: "fixed", inset: 0,
+        background: "rgba(0,8,40,0.77)",
+        zIndex: 9750, display: "flex", alignItems: "center", justifyContent: "center"
+      }}
+      onClick={onClose}
+      onKeyDown={e => { if (e.key === "Escape") onClose && onClose(); }}
+    >
+      <div
+        ref={modalRef}
+        style={{
+          background: "#191e34",
+          color: "#f0ffff",
+          minWidth: 330, maxWidth: 420,
+          padding: "38px 32px 21px 32px",
+          boxShadow: "0 6px 60px 0 #44f2ff40, 0 0 0 2.7px #00ffff66",
+          borderRadius: 12,
+          position: "relative",
+          outline: "none",
+          pointerEvents: "all",
+          animation: "modalin 0.14s cubic-bezier(.63,1.22,.5,1)",
+        }}
+        tabIndex={0}
+        onClick={e => e.stopPropagation()}
+      >
+        <div style={{ fontSize: 19, fontWeight: 700, color: "#00ffff", letterSpacing: 0.05, marginBottom: 18 }}>
+          {title}
+        </div>
+        <div style={{ fontSize: 16, marginBottom: 24 }}>
+          {children}
+        </div>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 16 }}>
+          <Button variant="outlined" onClick={onClose}>Cancel</Button>
+          {onConfirm && (
+            <Button variant="danger" onClick={onConfirm} style={{ minWidth: 80 }}>Confirm</Button>
+          )}
+        </div>
+      </div>
+      <style>
+        {`@keyframes modalin { from { transform: translateY(16px) scale(.98); opacity:0.5; }
+        to { transform: translateY(0) scale(1); opacity:1; } } `}
+      </style>
     </div>
   );
 }
 
 // =================== Navbar Component =====================
-function Navbar({ user, nav, onLogout, route, setRoute }) {
+function Navbar({ user, nav, onLogout, route }) {
   const [open, setOpen] = useState(false);
-
-  // Responsive: closes menu on main nav
+  // Responsive: closes menu on route change
   useEffect(() => { setOpen(false); }, [route]);
 
+  // Mobile nav: show hamburger at narrow widths, slide in/out
   return (
-    <nav className="navbar" style={{backgroundColor: 'var(--base-dark)'}}>
-      <div className="container" style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+    <nav className="navbar" style={{
+      backgroundColor: 'var(--base-dark)',
+      boxShadow: "0 2px 10px 0 #00f2ffc5",
+      borderBottom: "1.5px solid var(--border-color)",
+      transition: "box-shadow 0.22s"
+    }}>
+      <div className="container" style={{display:'flex',alignItems:'center',justifyContent:'space-between', gap:16,paddingRight:0}}>
         <div
           className="logo"
-          style={{cursor: "pointer"}}
+          tabIndex={0}
+          style={{cursor: "pointer", outline:'none'}}
           onClick={() => nav('home')}
+          aria-label="Go to homepage"
         >
-          <span className="logo-symbol" style={{color:'#00ffff'}}>&#9673;</span>
-          CivicConnect
+          <span className="logo-symbol" style={{color:'#00ffff', fontSize:26, verticalAlign:"middle"}}>&#9673;</span>
+          <span style={{marginLeft:6,letterSpacing:0.05}}>CivicConnect</span>
         </div>
-        <div className="desktop-nav" style={{display: 'flex', gap: 16, alignItems:'center'}}>
+        {/* Desktop Nav */}
+        <div
+          className="desktop-nav"
+          style={{
+            display: 'flex',
+            gap: 13,
+            alignItems: 'center',
+            flexWrap: "wrap",
+            minWidth: 0,
+            transition: "all 0.22s"
+          }}
+        >
           <NavLink label="Home" onClick={() => nav('home')} active={route==='home'}/>
           <NavLink label="Report Issue" onClick={() => nav('issue')} active={route==='issue'} />
           <NavLink label="Status" onClick={() => nav('status')} active={route==='status'} />
@@ -217,23 +428,81 @@ function Navbar({ user, nav, onLogout, route, setRoute }) {
             </>
           )}
           {user && (
-            <span style={{color:'#fff',marginRight:12}}>Hi, <b>{user.username}</b>!</span>
+            <span style={{
+              color:'#EEE', fontSize:16, marginLeft:2,
+              background: "rgba(0,255,255,0.04)", borderRadius: 6, padding: '5px 13px 5px 10px',
+              border: "1px solid #00fff318", letterSpacing: ".01em"
+            }}>
+              Hi, <b>{user.username}</b>!
+            </span>
           )}
           {user && (
-            <button
-              className="btn"
-              style={{background:'#222', color:'#fff', border:'1px solid #00ffff'}}
+            <Button
+              variant="outlined"
               onClick={onLogout}
-            >Logout</button>
+              size="small"
+              style={{marginLeft:10, padding:"5px 18px"}}
+            >Logout</Button>
           )}
         </div>
-        {/* Mobile menu button */}
+        {/* Hamburger mobile button */}
         <button
           className="btn"
-          aria-label="Menu"
-          style={{display:'none'}}
-          onClick={()=>setOpen(o=>!o)}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          onClick={() => setOpen(o=>!o)}
+          style={{
+            display:'none',
+            marginLeft:15,
+            fontSize:25,
+            padding: '6px 12px',
+            background: open ? "#00ffffbb" : "#151f3d",
+            color: "#fff",
+            border: 'none',
+            borderRadius: 6,
+            transition: "all 0.2s"
+          }}
         >☰</button>
+      </div>
+      {/* Responsive nav for mobile */}
+      <div
+        style={{
+          display: open ? 'block' : 'none',
+          background: "#091229ee",
+          color: "#f7ffff",
+          position: "absolute",
+          top: 56,
+          width: "100vw",
+          left: 0,
+          textAlign: "center",
+          boxShadow: "0 8px 40px #00f5ff18",
+          zIndex: 120
+        }}
+        tabIndex={-1}
+      >
+        <div style={{padding:"18px 0", display: "flex", flexDirection:"column", gap:13}}>
+          <NavLink label="Home" onClick={() => { nav('home'); setOpen(false); }} active={route==='home'}/>
+          <NavLink label="Report Issue" onClick={() => { nav('issue'); setOpen(false); }} active={route==='issue'} />
+          <NavLink label="Status" onClick={() => { nav('status'); setOpen(false); }} active={route==='status'} />
+          <NavLink label="Contact" onClick={() => { nav('contact'); setOpen(false); }} active={route==='contact'} />
+          {user && user.isAdmin && (
+            <NavLink label="Admin" onClick={() => { nav('admin'); setOpen(false); }} active={route==='admin'}/>
+          )}
+          {!user && (
+            <>
+              <NavLink label="Login" onClick={() => { nav('login'); setOpen(false); }} active={route==='login'} />
+              <NavLink label="Register" onClick={() => { nav('register'); setOpen(false); }} active={route==='register'} />
+            </>
+          )}
+          {user && (
+            <Button
+              variant="outlined"
+              size="small"
+              style={{margin:"0 auto", width:130}}
+              onClick={() => { onLogout(); setOpen(false); }}
+            >Logout</Button>
+          )}
+        </div>
       </div>
     </nav>
   );
@@ -242,66 +511,203 @@ function Navbar({ user, nav, onLogout, route, setRoute }) {
 // ========== NavLink Subcomponent ===========
 function NavLink({ label, onClick, active }) {
   return (
-    <button
-      className="btn"
-      style={{
-        backgroundColor: active ? "#00ffff" : "#000010",
-        color: "#fff",
-        border: "none",
-        fontWeight: active ? "bold" : undefined,
-        marginLeft: 2,
-      }}
+    <Button
+      variant={active ? "primary" : "secondary"}
+      size="small"
       onClick={onClick}
+      style={{
+        border: active ? "2.4px solid #00ffff" : undefined,
+        fontWeight: active ? 800 : 500,
+        boxShadow: active ? "0 2px 10px #00ffd966" : undefined,
+        marginLeft: 1,
+        letterSpacing: ".01em",
+        minWidth: 87,
+        borderRadius: 6,
+        transition: "background 0.19s, color .16s, box-shadow .21s"
+      }}
+      aria-current={active ? "page" : undefined}
     >
       {label}
-    </button>
+    </Button>
   );
 }
 
 // ============= FlashMsg ==============
-function FlashMsg({ msg }) {
+function FlashMsg({ msg, onClose }) {
+  // Animate in/out, allow dismiss
+  const [show, setShow] = useState(true);
+  useEffect(() => {
+    if (!msg) return;
+    setShow(true);
+    const closeTimer = setTimeout(() => setShow(false), 3800);
+    return () => clearTimeout(closeTimer);
+  }, [msg]);
+  useEffect(() => {
+    if (!show && onClose) onClose();
+  }, [show]);
+  if (!msg || !show) return null;
   return (
     <div
       style={{
         margin: '16px 0 8px 0',
-        padding: '8px 20px',
-        background: 'rgba(0,255,255,0.1)',
-        color: '#00ffff',
-        border: '1px solid #00ffff',
-        borderRadius: 4,
+        padding: '10px 22px',
+        background: 'rgba(0,255,255,0.13)',
+        color: '#1ad2ff',
+        border: '1.7px solid #1ad2ff',
+        borderRadius: 7,
         textAlign: 'center',
+        position: "relative",
+        fontWeight: 600,
+        fontSize: 16,
+        animation: "fadeInFlash 0.17s",
+        boxShadow: "0 2px 10px #00f2ff11"
       }}>
       {msg}
+      <button
+        aria-label="Close"
+        style={{
+          position: "absolute",
+          right: 11, top: 7,
+          background: "none", color: "#00ffff", border: "none", fontSize: 20, cursor: "pointer", opacity:0.7
+        }}
+        onClick={() => setShow(false)}
+        tabIndex={0}
+      >×</button>
+      <style>
+        {`@keyframes fadeInFlash { from { opacity:0; transform:translateY(-10px);}
+          to {opacity:1; transform:translateY(0);} }`}
+      </style>
     </div>
   );
 }
-
-// =========== Home Section ============
+/**
+ * Refined hero section with improved visual hierarchy, spacing, contrast, and accessible, branded buttons using new Button component.
+ */
 function Home({ nav, user }) {
+  // -- Responsive breakpoints state (SSR-safe) --
+  const [windowWidth, setWindowWidth] = useState(undefined);
+
+  useEffect(() => {
+    // Set initial width client-side only
+    setWindowWidth(typeof window !== "undefined" ? window.innerWidth : 1024);
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const smallScreen = windowWidth !== undefined ? windowWidth < 700 : false;
+  const smallerGap = windowWidth !== undefined ? windowWidth < 800 : false;
+
   return (
-    <section className="hero" style={{paddingTop:'48px'}}>
-      <div className="subtitle">Citizen Services Platform</div>
-      <h1 className="title" style={{color:'#00ffff'}}>CivicConnect</h1>
-      <p className="description">
-        CivicConnect helps you report civic issues, track status, and connect with city departments.<br/>
+    <section
+      className="hero"
+      style={{
+        paddingTop: smallScreen ? 32 : 70,
+        paddingBottom: smallScreen ? 36 : 64,
+        textAlign: "center",
+        display: "flex", flexDirection: "column", alignItems: "center", gap: 27,
+        transition: "all 0.17s"
+      }}
+      aria-labelledby="civicconnect-title"
+    >
+      <div
+        className="subtitle"
+        style={{
+          color: "#00e7e7",
+          fontWeight: 500,
+          fontSize: "1.17rem",
+          letterSpacing: 0.08,
+          marginBottom: 4
+        }}
+      >
+        Citizen Services Platform
+      </div>
+      <h1
+        id="civicconnect-title"
+        className="title"
+        style={{
+          color: "#00ffff",
+          fontSize: smallScreen ? "2.1rem" : "3.5rem",
+          fontWeight: 700,
+          lineHeight: 1.16,
+          margin: 0,
+          letterSpacing: ".01em",
+          textShadow: "0 2px 18px #09eaff33, 0 1px 1px #000"
+        }}
+      >
+        CivicConnect
+      </h1>
+      <p
+        className="description"
+        style={{
+          fontSize: smallScreen ? "1rem" : "1.17rem",
+          lineHeight: 1.6,
+          color: "#c7f9ff",
+          maxWidth: 600,
+          margin: "0 auto 18px auto",
+          transition: "all 0.17s"
+        }}
+      >
+        CivicConnect helps you report civic issues, track status, and connect with city departments.
+        <br />
         {user
-        ? "Ready to make a difference in your community?"
-        : "Register or log in to get started — your city at your fingertips!"
+          ? <span style={{ color: "#fff", fontWeight: 500 }}>
+              Ready to make a difference in your community?
+            </span>
+          : <span style={{ color: "#00ffff", fontWeight: 500 }}>
+              Register or log in to get started — your city at your fingertips!
+            </span>
         }
       </p>
-      <div style={{display:'flex',gap:16,justifyContent:'center'}}>
-        <button className="btn btn-large" onClick={()=>nav('issue')}>
+      <div
+        style={{
+          display: "flex",
+          gap: smallerGap ? 10 : 22,
+          justifyContent: "center",
+          flexWrap: "wrap",
+          marginTop: 10,
+          transition: "gap 0.18s"
+        }}
+      >
+        <Button
+          variant="primary"
+          size="large"
+          style={{ minWidth: 165, fontWeight: 700 }}
+          onClick={() => nav('issue')}
+        >
           Report an Issue
-        </button>
-        {user
-        ? <button className="btn btn-large" onClick={()=>nav('status')}>
+        </Button>
+        {user ? (
+          <Button
+            variant="outlined"
+            size="large"
+            style={{ minWidth: 165, fontWeight: 700 }}
+            onClick={() => nav('status')}
+          >
             View Your Reports
-          </button>
-        : <>
-            <button className="btn btn-large" onClick={()=>nav('register')}>Register</button>
-            <button className="btn btn-large" onClick={()=>nav('login')}>Login</button>
+          </Button>
+        ) : (
+          <>
+            <Button
+              variant="outlined"
+              size="large"
+              style={{ minWidth: 130, fontWeight: 600 }}
+              onClick={() => nav('register')}
+            >
+              Register
+            </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              style={{ minWidth: 104, fontWeight: 600 }}
+              onClick={() => nav('login')}
+            >
+              Login
+            </Button>
           </>
-        }
+        )}
       </div>
     </section>
   );
