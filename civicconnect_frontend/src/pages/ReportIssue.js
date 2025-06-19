@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import GoogleMap from "../components/GoogleMap";
 
 // Replace this with your actual API key securely in env or here for demo purposes
@@ -9,13 +9,84 @@ function PageReportIssue({
   issueForm,
   handleIssueFormChange,
   handleIssueSubmit,
-  handleIssueLocation,
+  handleIssueLocation, // not used anymore, replaced by local handleLocationRequest
   authError,
   inputStyles,
   errorStyles
 }) {
+  // Modal state for asking location permission
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [locating, setLocating] = useState(false);
+  const [locationErrorMsg, setLocationErrorMsg] = useState(""); // only for modal UX
+
+  // Local: perform location and update the form via synthetic event
+  const handleLocationRequest = () => {
+    setLocationErrorMsg("");
+    setShowLocationModal(true);
+  };
+
+  // On modal Accept - attempt geolocation, update parent form with synthetic event
+  const onAcceptLocation = () => {
+    setShowLocationModal(false);
+    setLocating(true);
+    setLocationErrorMsg("");
+    // Synthesize a change event for parent handler on success/fail to use same Redux/lifting logic.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const event = {
+            target: {
+              name: "location",
+              value: {
+                lat: pos.coords.latitude.toFixed(5),
+                lng: pos.coords.longitude.toFixed(5)
+              }
+            }
+          };
+          handleIssueFormChange(event);
+          setLocating(false);
+        },
+        (err) => {
+          setLocationErrorMsg("Location access denied.");
+          // Update using parent error mechanism
+          const event = {
+            target: {
+              name: "location",
+              value: { error: "Location access denied" }
+            }
+          };
+          handleIssueFormChange(event);
+          setLocating(false);
+        }
+      );
+    } else {
+      setLocationErrorMsg("Geolocation not supported.");
+      const event = {
+        target: {
+          name: "location",
+          value: { error: "Geolocation not supported" }
+        }
+      };
+      handleIssueFormChange(event);
+      setLocating(false);
+    }
+  };
+
+  const onDeclineLocation = () => {
+    setShowLocationModal(false);
+    setLocationErrorMsg("User denied location access.");
+    // Update parent to show error if needed
+    const event = {
+      target: {
+        name: "location",
+        value: { error: "User denied location access" }
+      }
+    };
+    handleIssueFormChange(event);
+  };
+
   return (
-    <div className="container" style={{ paddingTop: 120, maxWidth: 520 }}>
+    <div className="container" style={{ paddingTop: 120, maxWidth: 520, position: "relative" }}>
       <h2 style={{ color: 'var(--secondary)' }}>Report a Civic Issue</h2>
       <form onSubmit={handleIssueSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <select
@@ -52,13 +123,77 @@ function PageReportIssue({
           className="btn"
           type="button"
           style={{ background: 'var(--secondary)', color: 'var(--accent)' }}
-          onClick={handleIssueLocation}
+          onClick={handleLocationRequest}
+          disabled={locating}
         >
-          {issueForm.location ? 'Location Captured' : 'Use My Location'}
+          {locating
+            ? "Getting Location..."
+            : (issueForm.location && issueForm.location.lat && issueForm.location.lng)
+              ? "Location Captured"
+              : "Use My Location"}
         </button>
+        {/* Modal */}
+        {showLocationModal && (
+          <div
+            style={{
+              position: "fixed",
+              left: 0,
+              top: 0,
+              zIndex: 1000,
+              width: "100vw",
+              height: "100vh",
+              background: "rgba(0,0,0,0.4)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+            aria-modal="true"
+            role="dialog"
+          >
+            <div
+              style={{
+                background: "var(--primary)",
+                color: "var(--accent)",
+                borderRadius: 8,
+                padding: 32,
+                minWidth: 320,
+                maxWidth: "80vw",
+                textAlign: "center",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.5)",
+                border: "1px solid var(--border-color)"
+              }}
+            >
+              <div style={{ fontSize: "1.15rem", marginBottom: 14 }}>
+                Allow CivicConnect to access your device location?
+              </div>
+              <div style={{ color: "var(--text-secondary)", marginBottom: 22 }}>
+                This allows us to fill in the issue location automatically. Your location is only used for this report.
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", gap: 18 }}>
+                <button
+                  className="btn"
+                  style={{ background: 'var(--secondary)', color: 'var(--accent)' }}
+                  onClick={onAcceptLocation}
+                  autoFocus
+                >
+                  Allow
+                </button>
+                <button
+                  className="btn"
+                  style={{ background: 'var(--primary)', color: 'var(--secondary)', border: '1px solid var(--secondary)' }}
+                  onClick={onDeclineLocation}
+                >
+                  Decline
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Show error if location failure */}
-        {issueForm.location && issueForm.location.error && (
-          <div style={errorStyles}>{issueForm.location.error}</div>
+        {(locationErrorMsg || (issueForm.location && issueForm.location.error)) && (
+          <div style={errorStyles}>
+            {locationErrorMsg ? locationErrorMsg : issueForm.location && issueForm.location.error}
+          </div>
         )}
         {/* Show map if location is available with lat/lng */}
         {issueForm.location && issueForm.location.lat && issueForm.location.lng && (
