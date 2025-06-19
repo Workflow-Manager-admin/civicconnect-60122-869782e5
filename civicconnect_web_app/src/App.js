@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import GoogleMap from "./GoogleMap";
 
 // PUBLIC_INTERFACE
 // Main app container for CivicConnect
@@ -413,9 +414,9 @@ const fieldStyle = {
   marginBottom: 0
 };
 
-// -------------------- ReportIssueForm --------------------
-
 import GoogleMap from "./GoogleMap";
+
+// -------------------- ReportIssueForm --------------------
 
 // PUBLIC_INTERFACE
 function ReportIssueForm({ onReport }) {
