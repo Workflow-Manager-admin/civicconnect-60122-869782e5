@@ -415,8 +415,13 @@ const fieldStyle = {
 
 // -------------------- ReportIssueForm --------------------
 
+import GoogleMap from "./GoogleMap";
+
+import GoogleMap from "./GoogleMap";
+
 // PUBLIC_INTERFACE
 function ReportIssueForm({ onReport }) {
+// (rest of function unchanged)
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -427,18 +432,32 @@ function ReportIssueForm({ onReport }) {
   const [fileData, setFileData] = useState(null);
   const [message, setMessage] = useState(null);
 
+  // Track map coordinates for Google Map component display
+  const [coords, setCoords] = useState({ lat: null, lng: null });
+
   // Geolocation API integration
   function handleGeo() {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
         setForm(f =>
-          ({ ...f, location: `${pos.coords.latitude}, ${pos.coords.longitude}` })
+          ({ ...f, location: `${lat}, ${lng}` })
         );
+        setCoords({ lat, lng });
       },
       (err) => setMessage({ type: 'error', text: "Unable to fetch location." }),
       { enableHighAccuracy: true }
     );
   }
+
+  // Parse location field into coords when edited/filled
+  useEffect(() => {
+    if (form.location) {
+      const [lat, lng] = form.location.split(",").map(x => parseFloat(x.trim()));
+      if (!isNaN(lat) && !isNaN(lng)) setCoords({ lat, lng });
+    }
+  }, [form.location]);
 
   function handleFileChange(e) {
     const file = e.target.files[0];
@@ -481,6 +500,15 @@ function ReportIssueForm({ onReport }) {
   return (
     <div className="hero" style={{ maxWidth: 520, margin: '0 auto' }}>
       <div className="title" style={{ fontSize: '2rem', marginBottom: 4 }}>Report Civic Issue</div>
+      {/* Show map visually if available */}
+      {coords.lat && coords.lng && (
+        <div style={{ width: '100%', marginBottom: 12 }}>
+          <GoogleMap lat={coords.lat} lng={coords.lng} />
+          <div style={{ fontSize: 12, color: "#66defc", marginTop: 5 }}>
+            Map displays your chosen/device location.
+          </div>
+        </div>
+      )}
       <form style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 15 }} onSubmit={handleSubmit}>
         <input name="title" placeholder="Issue Title" value={form.title} maxLength={40}
           onChange={e => setForm(f => ({ ...f, title: e.target.value }))} style={fieldStyle} />
@@ -507,7 +535,6 @@ function ReportIssueForm({ onReport }) {
               placeholder="Click to auto-fill" style={{ ...fieldStyle, width: '80%', marginLeft: 10 }} />
             <button type="button" className="btn" style={{ padding: "8px 14px", marginLeft: 8 }} onClick={handleGeo}>📍 Use My Location</button>
           </label>
-
         </div>
         <button className="btn btn-large" type="submit" style={{ marginTop: 11 }}>Submit Report</button>
       </form>
