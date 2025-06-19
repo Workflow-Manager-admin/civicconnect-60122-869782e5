@@ -2,18 +2,34 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 /*
-  UI/UX Refactor Notes
+  UI/UX Dark Theme Refactor
 
-  - New reusable Button and Modal components
-  - Improved Navbar: more responsive, modern, animated
-  - Color/contrast updated for all elements following dark theme
-  - Modernized spacing; improved flex/grid layout usage
-  - Better feedback for actions: loading, disabling, subtle transitions
-  - Responsive design: layout and controls adapt at all breakpoints
-  - Accessibility: improved labelling, focus states, ARIA for modals/menus
-  - All components styled primarily with modern CSS-in-JS inline (fallbacks remain className for main theme)
-  - Visual polish increased for feedback, overlay, and interactions
+  - Applies new dark green, black, and brown color palette as variables/constants for maintainability.
+  - All core UI components (navbar, hero, forms, cards, modals, feedback, CTAs) are re-styled for modern dark UI/UX, accessibility, and responsiveness.
+  - Uses flexbox/grid and media queries for robust layout on all breakpoints (mobile/tablet/desktop).
+  - Color, spacing, font, elevation, and transitions tuned for visual hierarchy and clarity in low-light interfaces.
+  - Inline styles use centralized color constants; CSS classes implement structure and typography best practices.
 */
+
+// Dark green, black, and brown palette for UI theme
+const PALETTE = {
+  primary: "#14532d",       // dark green
+  secondary: "#231f20",     // near-black
+  accent: "#a68a64",        // brown
+  background: "#121212",    // nearly black
+  surface: "#19241b",       // deep olive
+  on_primary: "#ffffff",    // white on green
+  on_secondary: "#f0e8d9",  // light beige for dark backgrounds
+  focus: "#308865",         // highlight
+  border: "#353326",        // brownish-gray border
+  error: "#9a4218",         // accent brown-red
+  shadow: "0 2px 18px rgba(20, 83, 45, 0.14), 0 0 0 1.5px #2d2520cc"
+};
+const BREAKPOINTS = {
+  mobile: 0,
+  tablet: 700,
+  desktop: 992
+};
 
 /**
  * PUBLIC_INTERFACE
@@ -198,11 +214,12 @@ function CivicConnectApp() {
       mainContent = <Home nav={nav} user={user} />;
   }
 
-  // Gradient for main dark background
+  // Main dark theme background with subtle gradient and soft surface overlay
   const mainGradient = {
-    background: 'linear-gradient(135deg, #000 0%, #1a0000 40%, #ff0000 100%)',
+    background: `linear-gradient(115deg, ${PALETTE.background} 0%, ${PALETTE.surface} 50%, ${PALETTE.secondary} 120%)`,
     minHeight: "100dvh",
     transition: "background 0.7s cubic-bezier(.77,.01,.46,1)",
+    color: PALETTE.on_secondary
   };
 
   return (
@@ -213,25 +230,35 @@ function CivicConnectApp() {
         onLogout={logout}
         route={route}
         setRoute={setRoute}
+        colors={PALETTE}
       />
       <main style={{
         flex: "1 0 auto",
         marginTop: 80, marginBottom: 56,
         minHeight: "calc(100dvh - 136px)",
-        transition: "background 0.45s cubic-bezier(.63,.16,.49,1), color 0.3s"
+        transition: "background 0.45s cubic-bezier(.63,.16,.49,1), color 0.3s",
+        background: PALETTE.background
       }}>
-        <div className="container" style={{ transition: "all 0.22s" }}>
-          {flash && <FlashMsg msg={flash} onClose={()=>setFlash('')}/>}
+        <div
+          className="container"
+          style={{
+            background: "none", // let section backgrounds shine
+            transition: "all 0.22s",
+            boxShadow: "none"
+          }}
+        >
+          {flash && <FlashMsg msg={flash} onClose={() => setFlash('')} colors={PALETTE} />}
           {mainContent}
         </div>
       </main>
-      <Footer nav={nav} />
+      <Footer nav={nav} colors={PALETTE} />
       {/* Universal modal for confirmations, alerts, onboarding etc */}
       <Modal
         open={modal.open}
         title={modal.title}
         onClose={() => setModal({ ...modal, open: false })}
         onConfirm={modal.onConfirm ? () => { modal.onConfirm(); setModal({ ...modal, open: false }); } : undefined}
+        colors={PALETTE}
       >
         {modal.content}
       </Modal>
@@ -240,7 +267,10 @@ function CivicConnectApp() {
 }
 
 // ======== Universal Action Button & Modal ==========
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * Themed action Button for all use cases. Adapts to dark theme variants.
+ */
 function Button({
   children,
   onClick,
@@ -249,42 +279,49 @@ function Button({
   size = "medium",
   disabled = false,
   style = {},
+  colors = PALETTE,
   ...props
 }) {
-  // Visual variants, unified theme
-  // Brand-aligned gradient color theme for CTAs
+  // Centralized color variants for easy tuning
+  const theme = colors || PALETTE;
   const color = {
     primary: {
-      background: "linear-gradient(90deg, #000 0%, #ff0000 88%, #fff 100%)",
-      color: "#fff",
+      background: `linear-gradient(93deg, ${theme.primary} 75%, ${theme.accent} 100%)`,
+      color: theme.on_primary,
       border: "none",
-      boxShadow: "0 4px 18px #ff000055, 0 2px 5px #fff4"
+      boxShadow: !disabled
+        ? `0 2px 16px ${theme.primary}44, 0 1.5px 8px ${theme.accent}22`
+        : "none"
     },
     secondary: {
-      background: "linear-gradient(90deg, #232323 0%, #ff0000 90%)",
-      color: "#fff",
-      border: "1.5px solid #ff0000",
+      background: `linear-gradient(90deg, ${theme.secondary} 44%, ${theme.surface} 90%)`,
+      color: theme.on_secondary,
+      border: `1.3px solid ${theme.accent}`,
+      boxShadow: !disabled ? "0 1px 6px #12140e44" : "none"
     },
     outlined: {
-      background: "linear-gradient(90deg, #fff 0%, #000 90%)",
-      color: "#000",
-      border: "2px solid #fff"
+      background: "none",
+      color: theme.accent,
+      border: `2px solid ${theme.accent}`,
+      boxShadow: "none"
     },
     danger: {
-      background: "linear-gradient(100deg, #520000 0%, #ff0000 100%)",
-      color: "#fff",
-      border: "none"
+      background: `linear-gradient(100deg, ${theme.error} 0%, ${theme.secondary} 89%)`,
+      color: theme.on_secondary,
+      border: `1.6px solid ${theme.error}`,
+      boxShadow: !disabled ? "0 2px 9px #9a421820" : "none"
     },
     success: {
-      background: "linear-gradient(90deg, #e0ffe2 0%, #43ff84 100%)",
-      color: "#103d13",
-      border: "none"
+      background: `linear-gradient(92deg, #2e6d27 0%, #35844a 100%)`,
+      color: "#d8f3dd",
+      border: `1.4px solid #308865`,
+      boxShadow: !disabled ? "0 2px 9px #35844a22" : "none"
     }
   }[variant] || {};
   const sizeStyle = {
-    small: { padding: "6px 14px", fontSize: "0.96rem" },
-    medium: { padding: "10px 22px", fontSize: "1.05rem" },
-    large: { padding: "14px 30px", fontSize: "1.13rem" }
+    small: { padding: "7px 17px", fontSize: "1rem" },
+    medium: { padding: "11px 25px", fontSize: "1.09rem" },
+    large: { padding: "15px 34px", fontSize: "1.21rem" }
   }[size] || {};
 
   return (
@@ -294,15 +331,14 @@ function Button({
       tabIndex={0}
       disabled={disabled}
       style={{
-        borderRadius: 6,
-        boxShadow: disabled ? "none" : "0 0 0 1.7px #10b6d9, 0 2px 8px 0 #002f50b0",
+        borderRadius: 7,
         opacity: disabled ? 0.62 : 1,
         outline: "none",
-        border: "none",
-        fontWeight: 600,
-        letterSpacing: 0.05,
-        transition: "background-color 0.2s, color 0.2s, box-shadow 0.2s",
+        fontWeight: 700,
+        letterSpacing: 0.03,
+        transition: "background 0.22s, color 0.18s, box-shadow 0.19s, border 0.15s, filter 0.11s",
         cursor: disabled ? "not-allowed" : "pointer",
+        filter: disabled ? "grayscale(30%)" : undefined,
         ...color,
         ...sizeStyle,
         ...style,
@@ -320,11 +356,11 @@ function Button({
 // PUBLIC_INTERFACE
  * Modal component: refactored so all hooks are always called (never conditionally).
  */
-function Modal({ open, title, onClose, onConfirm, children }) {
+function Modal({ open, title, onClose, onConfirm, children, colors = PALETTE }) {
   // Animation and focus for accessibility
   const modalRef = useRef(null);
 
-  // Always call hooks regardless of whether modal is open; effects are gated inside
+  // Support accessibility and focus lock
   useEffect(() => {
     if (open && modalRef.current) {
       modalRef.current.focus();
@@ -344,6 +380,7 @@ function Modal({ open, title, onClose, onConfirm, children }) {
   }, [open, onClose]);
 
   if (!open) return null;
+  const theme = colors || PALETTE;
   return (
     <div
       role="dialog"
@@ -352,7 +389,7 @@ function Modal({ open, title, onClose, onConfirm, children }) {
       tabIndex={-1}
       style={{
         position: "fixed", inset: 0,
-        background: "rgba(0,8,40,0.77)",
+        background: "rgba(30,35,22,0.74)",
         zIndex: 9750, display: "flex", alignItems: "center", justifyContent: "center"
       }}
       onClick={onClose}
@@ -361,65 +398,106 @@ function Modal({ open, title, onClose, onConfirm, children }) {
       <div
         ref={modalRef}
         style={{
-          background: "#191e34",
-          color: "#f0ffff",
-          minWidth: 330, maxWidth: 420,
-          padding: "38px 32px 21px 32px",
-          boxShadow: "0 6px 60px 0 #44f2ff40, 0 0 0 2.7px #00ffff66",
-          borderRadius: 12,
+          background: theme.surface,
+          color: theme.on_secondary,
+          minWidth: 340, maxWidth: 430,
+          padding: "34px 28px 20px 28px",
+          boxShadow: "0 6px 48px 0 #1a2d1f85, 0 0 0 2.2px #a68a6444",
+          borderRadius: 13,
+          border: `1.5px solid ${theme.border}`,
           position: "relative",
           outline: "none",
           pointerEvents: "all",
-          animation: "modalin 0.14s cubic-bezier(.63,1.22,.5,1)",
+          animation: "modalin 0.13s cubic-bezier(.63,1.22,.5,1)",
         }}
         tabIndex={0}
         onClick={e => e.stopPropagation()}
       >
-        <div style={{ fontSize: 19, fontWeight: 700, color: "#00ffff", letterSpacing: 0.05, marginBottom: 18 }}>
+        <div style={{
+          fontSize: 21,
+          fontWeight: 900,
+          color: theme.accent,
+          letterSpacing: 0.05,
+          marginBottom: 15,
+          fontFamily: "inherit"
+        }}>
           {title}
         </div>
-        <div style={{ fontSize: 16, marginBottom: 24 }}>
+        <div style={{ fontSize: 16, lineHeight: 1.6, marginBottom: 23 }}>
           {children}
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: 16 }}>
-          <Button variant="outlined" onClick={onClose}>Cancel</Button>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 14 }}>
+          <Button variant="outlined" onClick={onClose} colors={theme}>Cancel</Button>
           {onConfirm && (
-            <Button variant="danger" onClick={onConfirm} style={{ minWidth: 80 }}>Confirm</Button>
+            <Button variant="danger" onClick={onConfirm} style={{ minWidth: 85 }} colors={theme}>Confirm</Button>
           )}
         </div>
       </div>
       <style>
-        {`@keyframes modalin { from { transform: translateY(16px) scale(.98); opacity:0.5; }
-        to { transform: translateY(0) scale(1); opacity:1; } } `}
+        {`@keyframes modalin { from { transform: translateY(22px) scale(.96); opacity:0.24;}
+          to { transform: translateY(0) scale(1); opacity:1; } } `}
       </style>
     </div>
   );
 }
 
 // =================== Navbar Component =====================
-function Navbar({ user, nav, onLogout, route }) {
+function Navbar({ user, nav, onLogout, route, colors=PALETTE }) {
   const [open, setOpen] = useState(false);
-  // Responsive: closes menu on route change
+
   useEffect(() => { setOpen(false); }, [route]);
 
-  // Mobile nav: show hamburger at narrow widths, slide in/out
+  // Responsive utility
+  const theme = colors || PALETTE;
+
+  // Hide hamburger on desktop — show below tablet
+  const isMobile = (typeof window !== "undefined" ? window.innerWidth : 1200) < BREAKPOINTS.tablet;
+
   return (
-    <nav className="navbar" style={{
-      backgroundColor: 'var(--base-dark)',
-      boxShadow: "0 2px 10px 0 #00f2ffc5",
-      borderBottom: "1.5px solid var(--border-color)",
-      transition: "box-shadow 0.22s"
-    }}>
-      <div className="container" style={{display:'flex',alignItems:'center',justifyContent:'space-between', gap:16,paddingRight:0}}>
+    <nav
+      className="navbar"
+      style={{
+        backgroundColor: theme.secondary,
+        boxShadow: "0 2px 14px 0 #22271545",
+        borderBottom: `1.7px solid ${theme.border}`,
+        transition: "box-shadow 0.22s",
+        zIndex: 101,
+        minHeight: 56,
+      }}
+    >
+      <div
+        className="container"
+        style={{
+          display:'flex',alignItems:'center',justifyContent:'space-between',
+          gap:18, paddingRight:3, minHeight:56
+        }}>
         <div
           className="logo"
           tabIndex={0}
-          style={{cursor: "pointer", outline:'none'}}
+          style={{
+            cursor: "pointer",
+            outline:'none',
+            fontFamily: "inherit"
+          }}
           onClick={() => nav('home')}
           aria-label="Go to homepage"
         >
-          <span className="logo-symbol" style={{color:'#00ffff', fontSize:26, verticalAlign:"middle"}}>&#9673;</span>
-          <span style={{marginLeft:6,letterSpacing:0.05}}>CivicConnect</span>
+          <span
+            className="logo-symbol"
+            style={{
+              color: theme.primary,
+              fontSize: 26,
+              verticalAlign:"middle",
+              marginRight: 5
+            }}
+          >&#9673;</span>
+          <span style={{
+            marginLeft: 2,
+            letterSpacing: 0.07,
+            color: theme.accent,
+            fontWeight: 900,
+            fontSize: 20,
+          }}>CivicConnect</span>
         </div>
         {/* Desktop Nav */}
         <div
@@ -433,24 +511,29 @@ function Navbar({ user, nav, onLogout, route }) {
             transition: "all 0.22s"
           }}
         >
-          <NavLink label="Home" onClick={() => nav('home')} active={route==='home'}/>
-          <NavLink label="Report Issue" onClick={() => nav('issue')} active={route==='issue'} />
-          <NavLink label="Status" onClick={() => nav('status')} active={route==='status'} />
-          <NavLink label="Contact" onClick={() => nav('contact')} active={route==='contact'} />
+          <NavLink label="Home" onClick={() => nav('home')} active={route==='home'} colors={theme} />
+          <NavLink label="Report Issue" onClick={() => nav('issue')} active={route==='issue'} colors={theme} />
+          <NavLink label="Status" onClick={() => nav('status')} active={route==='status'} colors={theme} />
+          <NavLink label="Contact" onClick={() => nav('contact')} active={route==='contact'} colors={theme} />
           {user && user.isAdmin && (
-            <NavLink label="Admin" onClick={() => nav('admin')} active={route==='admin'}/>
+            <NavLink label="Admin" onClick={() => nav('admin')} active={route==='admin'} colors={theme}/>
           )}
           {!user && (
             <>
-              <NavLink label="Login" onClick={() => nav('login')} active={route==='login'} />
-              <NavLink label="Register" onClick={() => nav('register')} active={route==='register'} />
+              <NavLink label="Login" onClick={() => nav('login')} active={route==='login'} colors={theme} />
+              <NavLink label="Register" onClick={() => nav('register')} active={route==='register'} colors={theme} />
             </>
           )}
           {user && (
             <span style={{
-              color:'#EEE', fontSize:16, marginLeft:2,
-              background: "rgba(0,255,255,0.04)", borderRadius: 6, padding: '5px 13px 5px 10px',
-              border: "1px solid #00fff318", letterSpacing: ".01em"
+              color:theme.on_secondary,
+              fontSize:16,
+              marginLeft:3,
+              background: "rgba(166, 138, 100, 0.11)",
+              borderRadius: 6,
+              padding: '5px 13px 5px 10px',
+              border: `1px solid ${theme.accent}18`,
+              letterSpacing: ".01em"
             }}>
               Hi, <b>{user.username}</b>!
             </span>
@@ -460,11 +543,17 @@ function Navbar({ user, nav, onLogout, route }) {
               variant="outlined"
               onClick={onLogout}
               size="small"
-              style={{marginLeft:10, padding:"5px 18px"}}
+              colors={theme}
+              style={{
+                marginLeft:10,
+                padding:"5px 18px",
+                border: `1.6px solid ${theme.border}`,
+                color: theme.accent
+              }}
             >Logout</Button>
           )}
         </div>
-        {/* Hamburger mobile button */}
+        {/* Hamburger mobile button visible on tablet and below */}
         <button
           className="btn"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -472,52 +561,53 @@ function Navbar({ user, nav, onLogout, route }) {
           onClick={() => setOpen(o=>!o)}
           style={{
             display:'none',
-            marginLeft:15,
+            marginLeft:18,
             fontSize:25,
-            padding: '6px 12px',
-            background: open ? "#00ffffbb" : "#151f3d",
-            color: "#fff",
+            padding: '7px 12px',
+            background: open ? theme.accent : theme.secondary,
+            color: theme.on_secondary,
             border: 'none',
             borderRadius: 6,
             transition: "all 0.2s"
           }}
         >☰</button>
       </div>
-      {/* Responsive nav for mobile */}
+      {/* Responsive nav for mobile/tablet */}
       <div
         style={{
           display: open ? 'block' : 'none',
-          background: "#091229ee",
-          color: "#f7ffff",
+          background: `${theme.surface}ee`,
+          color: theme.on_secondary,
           position: "absolute",
           top: 56,
           width: "100vw",
           left: 0,
           textAlign: "center",
-          boxShadow: "0 8px 40px #00f5ff18",
+          boxShadow: "0 8px 40px #23200018",
           zIndex: 120
         }}
         tabIndex={-1}
       >
         <div style={{padding:"18px 0", display: "flex", flexDirection:"column", gap:13}}>
-          <NavLink label="Home" onClick={() => { nav('home'); setOpen(false); }} active={route==='home'}/>
-          <NavLink label="Report Issue" onClick={() => { nav('issue'); setOpen(false); }} active={route==='issue'} />
-          <NavLink label="Status" onClick={() => { nav('status'); setOpen(false); }} active={route==='status'} />
-          <NavLink label="Contact" onClick={() => { nav('contact'); setOpen(false); }} active={route==='contact'} />
+          <NavLink label="Home" onClick={() => { nav('home'); setOpen(false); }} active={route==='home'} colors={theme} />
+          <NavLink label="Report Issue" onClick={() => { nav('issue'); setOpen(false); }} active={route==='issue'} colors={theme} />
+          <NavLink label="Status" onClick={() => { nav('status'); setOpen(false); }} active={route==='status'} colors={theme} />
+          <NavLink label="Contact" onClick={() => { nav('contact'); setOpen(false); }} active={route==='contact'} colors={theme} />
           {user && user.isAdmin && (
-            <NavLink label="Admin" onClick={() => { nav('admin'); setOpen(false); }} active={route==='admin'}/>
+            <NavLink label="Admin" onClick={() => { nav('admin'); setOpen(false); }} active={route==='admin'} colors={theme} />
           )}
           {!user && (
             <>
-              <NavLink label="Login" onClick={() => { nav('login'); setOpen(false); }} active={route==='login'} />
-              <NavLink label="Register" onClick={() => { nav('register'); setOpen(false); }} active={route==='register'} />
+              <NavLink label="Login" onClick={() => { nav('login'); setOpen(false); }} active={route==='login'} colors={theme} />
+              <NavLink label="Register" onClick={() => { nav('register'); setOpen(false); }} active={route==='register'} colors={theme} />
             </>
           )}
           {user && (
             <Button
               variant="outlined"
               size="small"
-              style={{margin:"0 auto", width:130}}
+              colors={theme}
+              style={{margin:"0 auto", width:130, border:`1.6px solid ${theme.accent}`}}
               onClick={() => { onLogout(); setOpen(false); }}
             >Logout</Button>
           )}
@@ -528,21 +618,24 @@ function Navbar({ user, nav, onLogout, route }) {
 }
 
 // ========== NavLink Subcomponent ===========
-function NavLink({ label, onClick, active }) {
+function NavLink({ label, onClick, active, colors = PALETTE }) {
+  const theme = colors || PALETTE;
   return (
     <Button
       variant={active ? "primary" : "secondary"}
       size="small"
       onClick={onClick}
+      colors={theme}
       style={{
-        border: active ? "2.4px solid #00ffff" : undefined,
-        fontWeight: active ? 800 : 500,
-        boxShadow: active ? "0 2px 10px #00ffd966" : undefined,
+        border: active ? `2.2px solid ${theme.accent}` : undefined,
+        fontWeight: active ? 800 : 600,
+        boxShadow: active ? `0 2px 12px ${theme.primary}88` : "none",
         marginLeft: 1,
         letterSpacing: ".01em",
         minWidth: 87,
-        borderRadius: 6,
-        transition: "background 0.19s, color .16s, box-shadow .21s"
+        borderRadius: 7,
+        filter: active ? "brightness(1.18)" : undefined,
+        transition: "background 0.18s, color .15s, box-shadow .17s"
       }}
       aria-current={active ? "page" : undefined}
     >
@@ -552,42 +645,48 @@ function NavLink({ label, onClick, active }) {
 }
 
 // ============= FlashMsg ==============
-function FlashMsg({ msg, onClose }) {
+function FlashMsg({ msg, onClose, colors = PALETTE }) {
   // Animate in/out, allow dismiss
   const [show, setShow] = useState(true);
+  const theme = colors || PALETTE;
   useEffect(() => {
     if (!msg) return;
     setShow(true);
-    const closeTimer = setTimeout(() => setShow(false), 3800);
+    const closeTimer = setTimeout(() => setShow(false), 4200);
     return () => clearTimeout(closeTimer);
   }, [msg]);
   useEffect(() => {
     if (!show && onClose) onClose();
-  }, [show]);
+  }, [show, onClose]);
   if (!msg || !show) return null;
   return (
     <div
       style={{
-        margin: '16px 0 8px 0',
-        padding: '10px 22px',
-        background: 'rgba(0,255,255,0.13)',
-        color: '#1ad2ff',
-        border: '1.7px solid #1ad2ff',
-        borderRadius: 7,
+        margin: '18px 0 12px 0',
+        padding: '12px 24px',
+        background: `${theme.surface}cc`,
+        color: theme.accent,
+        border: `1.5px solid ${theme.accent}`,
+        borderRadius: 8,
         textAlign: 'center',
         position: "relative",
-        fontWeight: 600,
+        fontWeight: 700,
         fontSize: 16,
-        animation: "fadeInFlash 0.17s",
-        boxShadow: "0 2px 10px #00f2ff11"
+        animation: "fadeInFlash .18s",
+        boxShadow: "0 2px 12px #0003, 0 0 0 2.4px #a68a6422"
       }}>
       {msg}
       <button
         aria-label="Close"
         style={{
           position: "absolute",
-          right: 11, top: 7,
-          background: "none", color: "#00ffff", border: "none", fontSize: 20, cursor: "pointer", opacity:0.7
+          right: 12, top: 8,
+          background: "none",
+          color: theme.on_primary,
+          border: "none",
+          fontSize: 20,
+          cursor: "pointer",
+          opacity: 0.65
         }}
         onClick={() => setShow(false)}
         tabIndex={0}
@@ -607,11 +706,10 @@ function FlashMsg({ msg, onClose }) {
  * Home/Landing section with dark-gradient, responsive layout, and brand-aligned CTAs.
  */
 function Home({ nav, user }) {
-  // Responsive window width
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
-
+  const theme = PALETTE;
   useEffect(() => {
     function handleResize() {
       setWindowWidth(window.innerWidth);
@@ -619,8 +717,7 @@ function Home({ nav, user }) {
     window.addEventListener("resize", handleResize, { passive: true });
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const smallScreen = windowWidth < 700;
+  const smallScreen = windowWidth < BREAKPOINTS.tablet;
   const smallerGap = windowWidth < 800;
 
   return (
@@ -628,29 +725,30 @@ function Home({ nav, user }) {
       className="hero"
       style={{
         paddingTop: smallScreen ? 32 : 70,
-        paddingBottom: smallScreen ? 36 : 64,
+        paddingBottom: smallScreen ? 32 : 64,
         textAlign: "center",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 27,
+        gap: 29,
         transition: "all 0.17s",
-        background: "linear-gradient(120deg, #101010 0%, #550000 50%, #ff0000 120%)",
-        borderRadius: "24px",
-        boxShadow: "0 0 80px #ff0000a4, 0 2px 24px #0004",
-        margin: "0 0 38px 0",
+        background: `linear-gradient(118deg, ${theme.background} 0%, ${theme.surface}  60%, ${theme.accent}11 95%)`,
+        borderRadius: "23px",
+        boxShadow: `0 0 80px ${theme.primary}3c, 0 2px 22px #0002`,
+        margin: smallScreen ? "0 0 24px 0" : "0 0 38px 0",
+        border: `1.4px solid ${theme.border}`,
       }}
       aria-labelledby="civicconnect-title"
     >
       <div
         className="subtitle"
         style={{
-          color: "#ff7070",
-          fontWeight: 600,
-          fontSize: "1.12rem",
-          letterSpacing: 0.08,
+          color: theme.primary,
+          fontWeight: 700,
+          fontSize: "1.14rem",
+          letterSpacing: 0.09,
           marginBottom: 4,
-          textShadow: "0 2px 12px #000"
+          textShadow: "0 2px 11px #1d2528c0"
         }}
       >
         Citizen Services Platform
@@ -659,16 +757,16 @@ function Home({ nav, user }) {
         id="civicconnect-title"
         className="title"
         style={{
-          background: "linear-gradient(94deg, #fff 0%, #ff0000 40%, #000 100%)",
+          background: `linear-gradient(90deg, ${theme.accent} 2%, #fff8 50%, ${theme.primary} 97%)`,
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
-          fontSize: smallScreen ? "2.15rem" : "3.57rem",
-          fontWeight: 800,
+          fontSize: smallScreen ? "2.12rem" : "3.37rem",
+          fontWeight: 900,
           lineHeight: 1.12,
           margin: 0,
-          letterSpacing: ".01em",
-          textShadow: "0 2px 22px #ff000044, 0 1px 1px #000"
+          letterSpacing: ".012em",
+          textShadow: `0 2px 19px ${theme.primary}64`
         }}
       >
         CivicConnect
@@ -676,22 +774,22 @@ function Home({ nav, user }) {
       <p
         className="description"
         style={{
-          fontSize: smallScreen ? "1rem" : "1.15rem",
-          lineHeight: 1.6,
-          color: "#fff",
-          maxWidth: 610,
-          margin: "0 auto 18px auto",
-          textShadow: "0 2px 13px #090909ee, 0 1px 1px #fff2",
-          transition: "all 0.17s"
+          fontSize: smallScreen ? "1.03rem" : "1.13rem",
+          lineHeight: 1.63,
+          color: theme.on_secondary,
+          maxWidth: 620,
+          margin: "0 auto 19px auto",
+          textShadow: `0 3px 16px #030c0a8e, 0 1px 1px #fff1`,
+          transition: "all 0.16s"
         }}
       >
         CivicConnect helps you report civic issues, track status, and connect with city departments.
         <br />
         {user
-          ? <span style={{ color: "#fff", fontWeight: 700 }}>
+          ? <span style={{ color: theme.accent, fontWeight: 800 }}>
               Ready to make a difference in your community?
             </span>
-          : <span style={{ color: "#ff0000", fontWeight: 700 }}>
+          : <span style={{ color: theme.primary, fontWeight: 700 }}>
               Register or log in to get started — your city at your fingertips!
             </span>
         }
@@ -709,14 +807,12 @@ function Home({ nav, user }) {
         <Button
           variant="primary"
           size="large"
+          colors={theme}
           style={{
-            minWidth: 165,
-            fontWeight: 700,
-            background: "linear-gradient(90deg, #ff2a2a 0%, #fff 75%, #ff0000 100%)",
-            color: "#000",
-            boxShadow: "0 5px 26px #ff0000a2, 0 2px 6px #fff5",
-            border: "none",
-            transition: "background 0.3s, color 0.3s",
+            minWidth: 171,
+            fontWeight: 800,
+            border: `2.1px solid ${theme.accent}`,
+            boxShadow: `0 4px 14px ${theme.primary}70, 0 1.1px 4.8px ${theme.accent}55`
           }}
           onClick={() => nav('issue')}
         >
@@ -726,13 +822,12 @@ function Home({ nav, user }) {
           <Button
             variant="outlined"
             size="large"
+            colors={theme}
             style={{
               minWidth: 165,
               fontWeight: 700,
-              background: "linear-gradient(90deg, #000 0%, #333 93%, #ff0000 100%)",
-              color: "#fff",
-              border: "2.2px solid #ff0000",
-              boxShadow: "0 1px 14px #9e000051"
+              border: `2.4px solid ${theme.primary}`,
+              boxShadow: `0 1px 13px ${theme.primary}28`
             }}
             onClick={() => nav('status')}
           >
@@ -743,13 +838,11 @@ function Home({ nav, user }) {
             <Button
               variant="outlined"
               size="large"
+              colors={theme}
               style={{
-                minWidth: 130,
-                fontWeight: 600,
-                background: "linear-gradient(100deg, #fff 0%, #ff0000 85%)",
-                color: "#000",
-                border: "2.2px solid #fff",
-                boxShadow: "0 1px 9px #fff9",
+                minWidth: 132,
+                fontWeight: 700,
+                border: `2.1px solid ${theme.accent}99`
               }}
               onClick={() => nav('register')}
             >
@@ -758,13 +851,11 @@ function Home({ nav, user }) {
             <Button
               variant="outlined"
               size="large"
+              colors={theme}
               style={{
-                minWidth: 104,
-                fontWeight: 600,
-                background: "linear-gradient(120deg, #121212 0%, #ff0000 80%)",
-                color: "#fff",
-                border: "2.2px solid #ff0000",
-                boxShadow: "0 1px 7px #9003",
+                minWidth: 102,
+                fontWeight: 700,
+                border: `2.1px solid ${theme.primary}`,
               }}
               onClick={() => nav('login')}
             >
@@ -1296,25 +1387,39 @@ function ContactDepartments() {
 }
 
 // =============== Footer Component =============
-function Footer({ nav }) {
+function Footer({ nav, colors = PALETTE }) {
+  const theme = colors || PALETTE;
   return (
     <footer
       style={{
-        background: '#0a0a2f',
-        color: '#aaa',
+        background: theme.secondary,
+        color: theme.on_secondary,
         textAlign: 'center',
-        padding: '12px 0',
-        borderTop: "1px solid #222",
-        marginTop:'36px',
-        fontSize: '1rem',
+        padding: '13px 0',
+        borderTop: `1.2px solid ${theme.border}`,
+        marginTop: '38px',
+        fontSize: '1.04rem',
         position: 'relative',
         width: '100%',
-        flexShrink:0,
+        flexShrink: 0,
+        letterSpacing: ".01em"
       }}
     >
       <div>
-        <span style={{color:'#00ffff',fontWeight:500}}>CivicConnect</span> &copy; {new Date().getFullYear()} &mdash;&nbsp;
-        <button className="btn" style={{color:"#00ffff",background:'transparent',fontSize:'1rem',padding:'2px 14px'}} onClick={()=>nav('contact')}>Contact</button>
+        <span style={{color:theme.accent, fontWeight:900, letterSpacing: ".04em"}}>CivicConnect</span> &copy; {new Date().getFullYear()} &mdash;&nbsp;
+        <button
+          className="btn"
+          style={{
+            color: theme.accent,
+            background: 'none',
+            fontSize: '1rem',
+            fontWeight: 700,
+            border: "none",
+            padding: '2px 14px',
+            cursor: "pointer"
+          }}
+          onClick={() => nav('contact')}
+        >Contact</button>
       </div>
     </footer>
   );
