@@ -417,11 +417,9 @@ const fieldStyle = {
 
 import GoogleMap from "./GoogleMap";
 
-import GoogleMap from "./GoogleMap";
-
 // PUBLIC_INTERFACE
 function ReportIssueForm({ onReport }) {
-// (rest of function unchanged)
+  // (rest of function unchanged)
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -503,9 +501,19 @@ function ReportIssueForm({ onReport }) {
       {/* Show map visually if available */}
       {coords.lat && coords.lng && (
         <div style={{ width: '100%', marginBottom: 12 }}>
-          <GoogleMap lat={coords.lat} lng={coords.lng} />
+          <GoogleMap
+            lat={coords.lat}
+            lng={coords.lng}
+            // allow parent to be notified when location/address selected
+            onLocationChange={val => {
+              const locString = `${val.lat}, ${val.lng}`;
+              setForm(f => ({ ...f, location: locString }));
+              setCoords({ lat: val.lat, lng: val.lng });
+              // Optionally, display the address somewhere else on the form if needed (already in map box)
+            }}
+          />
           <div style={{ fontSize: 12, color: "#66defc", marginTop: 5 }}>
-            Map displays your chosen/device location.
+            Select your incident location on map (click or drag marker). Address will auto-update below the map.
           </div>
         </div>
       )}
