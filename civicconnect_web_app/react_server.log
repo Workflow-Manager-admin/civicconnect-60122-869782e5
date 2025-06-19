@@ -155,3 +155,23 @@ javascript modules 51.9 KiB
   ./src/index.js 530 bytes [code generated]
   ./src/App.js 51.4 KiB [built] [code generated]
 webpack 5.99.9 compiled successfully in 201 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.53 MiB
+  asset bundle.js 1.46 MiB [emitted] (name: main)
+  asset main.d80d91d0ad1da95e2935.hot-update.js 68.3 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.d80d91d0ad1da95e2935.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.53 MiB = bundle.js 1.46 MiB main.d80d91d0ad1da95e2935.hot-update.js 68.3 KiB
+cached modules 1.27 MiB [cached] 42 modules
+runtime modules 27.5 KiB 14 modules
+./src/App.js 52.4 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 341 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.48 MiB
+  asset bundle.js 1.47 MiB [emitted] (name: main)
+  asset main.f98d2b6b347b5dc08463.hot-update.js 12.9 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.f98d2b6b347b5dc08463.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.48 MiB = bundle.js 1.47 MiB main.f98d2b6b347b5dc08463.hot-update.js 12.9 KiB
+cached modules 1.31 MiB [cached] 42 modules
+runtime modules 27.5 KiB 14 modules
+./src/GoogleMap.js 9.87 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 63 ms

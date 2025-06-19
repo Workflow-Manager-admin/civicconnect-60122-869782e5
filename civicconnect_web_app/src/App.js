@@ -433,7 +433,14 @@ function ReportIssueForm({ onReport }) {
   const [coords, setCoords] = useState({ lat: null, lng: null });
 
   // Geolocation API integration
+  // PUBLIC_INTERFACE
   function handleGeo() {
+    // Request geolocation only in response to a clear user gesture.
+    if (!navigator.geolocation) {
+      setMessage({ type: 'error', text: "Geolocation is not supported by your browser." });
+      return;
+    }
+    setMessage({ type: 'info', text: 'Fetching device location...' });
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const lat = pos.coords.latitude;
@@ -442,9 +449,26 @@ function ReportIssueForm({ onReport }) {
           ({ ...f, location: `${lat}, ${lng}` })
         );
         setCoords({ lat, lng });
+        setMessage(null);
       },
-      (err) => setMessage({ type: 'error', text: "Unable to fetch location." }),
-      { enableHighAccuracy: true }
+      (err) => {
+        let msg = "Unable to fetch location.";
+        switch (err.code) {
+          case err.PERMISSION_DENIED:
+            msg = "Location permission was denied. Please enable location access and try again.";
+            break;
+          case err.POSITION_UNAVAILABLE:
+            msg = "Location information is unavailable (check network/GPS).";
+            break;
+          case err.TIMEOUT:
+            msg = "Location request timed out. Try again or check device settings.";
+            break;
+          default:
+            msg = "An unknown error occurred while fetching location.";
+        }
+        setMessage({ type: 'error', text: msg });
+      },
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
     );
   }
 
