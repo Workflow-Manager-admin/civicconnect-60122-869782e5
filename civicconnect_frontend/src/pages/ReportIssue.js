@@ -1,4 +1,8 @@
 import React from "react";
+import GoogleMap from "../components/GoogleMap";
+
+// Replace this with your actual API key securely in env or here for demo purposes
+const GOOGLE_MAPS_API_KEY = "YOUR_GOOGLE_MAPS_API_KEY_HERE";
 
 // PUBLIC_INTERFACE
 function PageReportIssue({
@@ -52,8 +56,18 @@ function PageReportIssue({
         >
           {issueForm.location ? 'Location Captured' : 'Use My Location'}
         </button>
+        {/* Show error if location failure */}
         {issueForm.location && issueForm.location.error && (
           <div style={errorStyles}>{issueForm.location.error}</div>
+        )}
+        {/* Show map if location is available with lat/lng */}
+        {issueForm.location && issueForm.location.lat && issueForm.location.lng && (
+          <GoogleMap
+            lat={parseFloat(issueForm.location.lat)}
+            lng={parseFloat(issueForm.location.lng)}
+            apiKey={GOOGLE_MAPS_API_KEY}
+            style={{ width: "100%", height: 200 }}
+          />
         )}
         <button className="btn btn-large" style={{ marginTop: 10 }} type="submit">Submit Issue</button>
       </form>
