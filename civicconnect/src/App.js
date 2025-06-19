@@ -316,10 +316,15 @@ function Button({
   );
 }
 
+/*
 // PUBLIC_INTERFACE
+ * Modal component: refactored so all hooks are always called (never conditionally).
+ */
 function Modal({ open, title, onClose, onConfirm, children }) {
   // Animation and focus for accessibility
   const modalRef = useRef(null);
+
+  // Always call hooks regardless of whether modal is open; effects are gated inside
   useEffect(() => {
     if (open && modalRef.current) {
       modalRef.current.focus();
@@ -329,15 +334,16 @@ function Modal({ open, title, onClose, onConfirm, children }) {
     }
     return () => { document.body.style.overflow = ""; };
   }, [open]);
-  if (!open) return null;
-  // Esc key closes modal
   useEffect(() => {
+    if (!open) return;
     const handler = (e) => {
       if (e.key === "Escape" && onClose) onClose();
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [onClose]);
+  }, [open, onClose]);
+
+  if (!open) return null;
   return (
     <div
       role="dialog"
@@ -877,6 +883,12 @@ function PleaseLogin({ nav, what }) {
 }
 
 // ============== Issue Report Form =============
+/**
+ * Google Maps API Key for server-side geocoding (do NOT expose on frontend to avoid public leakage).
+ * Use for backend/reverse geocoding fetches, not direct browser geolocation.
+ * const GOOGLE_MAPS_API_KEY = "AIzaSyAh45zSQ_-TvIwvHfPVhCG31a0ttZatp2E";
+ */
+
 // PUBLIC_INTERFACE
 function IssueReportForm({ onReport, nav }) {
   const [title, setTitle] = useState('');
@@ -888,23 +900,36 @@ function IssueReportForm({ onReport, nav }) {
   const [status, setStatus] = useState('');
   const [loadingLoc, setLoadingLoc] = useState(false);
 
-  // Geolocation
+  // Device Geolocation via browser API.
+  // Uses device-level (browser) Geolocation only!
   function fetchLocation() {
+    setStatus("");
     setLoadingLoc(true);
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const coords = `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`;
           setLocation(coords);
+          setStatus("Device location detected. You may edit or keep as is.");
           setLoadingLoc(false);
         },
         (err) => {
-          setStatus("Could not obtain geolocation.");
+          // Improve error reporting, suggest browser help
+          if (err.code === 1) {
+            setStatus("Permission denied. Enable location permission in your browser for autofill.");
+          } else if (err.code === 2) {
+            setStatus("Location unavailable. Try moving to an open area or check your device settings.");
+          } else if (err.code === 3) {
+            setStatus("Location timeout. Please try again or enter location manually.");
+          } else {
+            setStatus("Could not obtain geolocation. Please enter location manually.");
+          }
           setLoadingLoc(false);
-        }
+        },
+        { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
       );
     } else {
-      setStatus("Geolocation API not supported.");
+      setStatus("Geolocation API not supported in your browser.");
       setLoadingLoc(false);
     }
   }
@@ -967,6 +992,7 @@ function IssueReportForm({ onReport, nav }) {
               placeholder="Click to autofill"
               style={{marginLeft:8,minWidth:120}}
               maxLength={96}
+              aria-label="Issue location"
             />
             <button
               className="btn"
@@ -974,10 +1000,14 @@ function IssueReportForm({ onReport, nav }) {
               type="button"
               onClick={fetchLocation}
               disabled={loadingLoc}
+              aria-label="Fetch device location"
             >
               {loadingLoc ? "Detecting..." : "Autofill"}
             </button>
           </label>
+          <div style={{fontSize:13, color:"#aaf", marginTop:4}}>
+            For privacy, only your coordinates will be stored, not a full address. 
+          </div>
         </div>
         <button className="btn btn-large" type="submit">Submit Issue</button>
         <button className="btn" type="button" style={{marginLeft:12}} onClick={()=>nav('home')}>Cancel</button>
