@@ -468,38 +468,67 @@ function Navbar({ user, nav, onLogout, route, colors=PALETTE }) {
       <div
         className="container"
         style={{
-          display:'flex',alignItems:'center',justifyContent:'space-between',
-          gap:18, paddingRight:3, minHeight:56
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 14,
+          minHeight: 56,
+          paddingRight: 3,
+          paddingLeft: 3,
+          position: 'relative',
+          width: '100%',
         }}>
+        {/* Centered BIG Navbar Title */}
         <div
-          className="logo"
           tabIndex={0}
           style={{
-            cursor: "pointer",
-            outline:'none',
-            fontFamily: "inherit"
+            position: 'absolute',
+            left: 0,
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            minWidth: 0
           }}
-          onClick={() => nav('home')}
-          aria-label="Go to homepage"
+          aria-hidden="true"
+        />
+        <div
+          style={{
+            flex: '1 1 0%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minWidth: 0,
+          }}
         >
           <span
-            className="logo-symbol"
             style={{
-              color: theme.primary,
-              fontSize: 26,
-              verticalAlign:"middle",
-              marginRight: 5
+              fontFamily: "inherit",
+              fontWeight: 900,
+              fontSize: 'clamp(2rem, 6vw, 3.5rem)',
+              letterSpacing: "0.03em",
+              color: theme.accent,
+              background: `linear-gradient(90deg, ${theme.accent} 0%, #fff 55%, ${theme.primary} 90%)`,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              lineHeight: 1.08,
+              textAlign: 'center',
+              textShadow: `0 3px 20px ${theme.primary}50`,
+              userSelect: 'none',
+              margin: 0,
+              padding: 0,
+              transition: 'font-size 0.2s, color 0.2s',
+              width: '100%',
+              display: 'block'
             }}
-          >&#9673;</span>
-          <span style={{
-            marginLeft: 2,
-            letterSpacing: 0.07,
-            color: theme.accent,
-            fontWeight: 900,
-            fontSize: 20,
-          }}>CivicConnect</span>
+            aria-label="Go to homepage"
+            onClick={() => nav('home')}
+            role="button"
+            tabIndex={0}
+          >
+            City
+          </span>
         </div>
-        {/* Desktop Nav */}
         <div
           className="desktop-nav"
           style={{
@@ -508,7 +537,8 @@ function Navbar({ user, nav, onLogout, route, colors=PALETTE }) {
             alignItems: 'center',
             flexWrap: "wrap",
             minWidth: 0,
-            transition: "all 0.22s"
+            transition: "all 0.22s",
+            marginLeft: 'auto'
           }}
         >
           <NavLink label="Home" onClick={() => nav('home')} active={route==='home'} colors={theme} />
