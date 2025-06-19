@@ -902,9 +902,25 @@ function IssueReportForm({ onReport, nav }) {
 
   // Device Geolocation via browser API.
   // Uses device-level (browser) Geolocation only!
-  function fetchLocation() {
+  async function fetchLocation() {
     setStatus("");
     setLoadingLoc(true);
+
+    // Check Permissions API first, for accurate permission status
+    const hasPermAPI = typeof navigator.permissions !== "undefined" && navigator.permissions.query;
+    try {
+      if (hasPermAPI) {
+        const permStatus = await navigator.permissions.query({ name: "geolocation" });
+        if (permStatus.state === "denied") {
+          setStatus("Location permission is denied in your browser settings. Please enable location access for autofill.");
+          setLoadingLoc(false);
+          return;
+        }
+      }
+    } catch (e) {
+      // Permissions API failed, ignore and proceed
+    }
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -914,12 +930,13 @@ function IssueReportForm({ onReport, nav }) {
           setLoadingLoc(false);
         },
         (err) => {
-          // Improve error reporting, suggest browser help
-          if (err.code === 1) {
-            setStatus("Permission denied. Enable location permission in your browser for autofill.");
-          } else if (err.code === 2) {
+          // Check permission state via Permissions API if possible
+          if (err.code === err.PERMISSION_DENIED || err.code === 1) {
+            // Check if browser explicitly says denied, else ask user to check
+            setStatus("Permission denied. Please check your browser settings and reload the page. If already allowed, you may need to clear site data.");
+          } else if (err.code === err.POSITION_UNAVAILABLE || err.code === 2) {
             setStatus("Location unavailable. Try moving to an open area or check your device settings.");
-          } else if (err.code === 3) {
+          } else if (err.code === err.TIMEOUT || err.code === 3) {
             setStatus("Location timeout. Please try again or enter location manually.");
           } else {
             setStatus("Could not obtain geolocation. Please enter location manually.");
