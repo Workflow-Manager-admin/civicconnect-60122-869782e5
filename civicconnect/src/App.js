@@ -720,32 +720,65 @@ function Home({ nav, user }) {
   const smallScreen = windowWidth < BREAKPOINTS.tablet;
   const smallerGap = windowWidth < 800;
 
+  // Central "City" display - BIG, BOLD, RESPONSIVE, COLOR-THEMED
   return (
     <section
       className="hero"
       style={{
-        paddingTop: smallScreen ? 32 : 70,
-        paddingBottom: smallScreen ? 32 : 64,
+        paddingTop: smallScreen ? 40 : 85,
+        paddingBottom: smallScreen ? 34 : 80,
         textAlign: "center",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 29,
+        gap: 39,
         transition: "all 0.17s",
-        background: `linear-gradient(118deg, ${theme.background} 0%, ${theme.surface}  60%, ${theme.accent}11 95%)`,
-        borderRadius: "23px",
-        boxShadow: `0 0 80px ${theme.primary}3c, 0 2px 22px #0002`,
-        margin: smallScreen ? "0 0 24px 0" : "0 0 38px 0",
+        background: `linear-gradient(118deg, ${theme.background} 0%, ${theme.surface}  65%, ${theme.accent}19 99%)`,
+        borderRadius: "24px",
+        boxShadow: `0 0 80px ${theme.primary}44, 0 2px 22px #0002`,
+        margin: smallScreen ? "0 0 18px 0" : "0 0 30px 0",
         border: `1.4px solid ${theme.border}`,
       }}
-      aria-labelledby="civicconnect-title"
+      aria-labelledby="city-hero-title"
     >
       <div
-        className="subtitle"
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          marginBottom: smallScreen ? 0 : 4
+        }}
+      >
+        <h1
+          id="city-hero-title"
+          style={{
+            fontFamily: "inherit",
+            fontWeight: 1000,
+            fontSize: smallScreen ? "3rem" : "6vw",
+            lineHeight: 1.08,
+            margin: "0 auto",
+            color: theme.accent,
+            letterSpacing: ".01em",
+            textShadow: `0 7px 22px ${theme.primary}90, 0 1.5px 10px #fff3`,
+            background: `linear-gradient(90deg, ${theme.accent} 0%, #fff 55%, ${theme.primary} 90%)`,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            textAlign: "center",
+            transition: "all 0.18s",
+            maxWidth: "100vw",
+            wordBreak: "break-word"
+          }}
+        >
+          City
+        </h1>
+      </div>
+      <div
         style={{
           color: theme.primary,
           fontWeight: 700,
-          fontSize: "1.14rem",
+          fontSize: smallScreen ? "1.19rem" : "1.29rem",
           letterSpacing: 0.09,
           marginBottom: 4,
           textShadow: "0 2px 11px #1d2528c0"
@@ -753,28 +786,10 @@ function Home({ nav, user }) {
       >
         Citizen Services Platform
       </div>
-      <h1
-        id="civicconnect-title"
-        className="title"
-        style={{
-          background: `linear-gradient(90deg, ${theme.accent} 2%, #fff8 50%, ${theme.primary} 97%)`,
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-          fontSize: smallScreen ? "2.12rem" : "3.37rem",
-          fontWeight: 900,
-          lineHeight: 1.12,
-          margin: 0,
-          letterSpacing: ".012em",
-          textShadow: `0 2px 19px ${theme.primary}64`
-        }}
-      >
-        CivicConnect
-      </h1>
       <p
         className="description"
         style={{
-          fontSize: smallScreen ? "1.03rem" : "1.13rem",
+          fontSize: smallScreen ? "1.09rem" : "1.19rem",
           lineHeight: 1.63,
           color: theme.on_secondary,
           maxWidth: 620,
@@ -783,7 +798,7 @@ function Home({ nav, user }) {
           transition: "all 0.16s"
         }}
       >
-        CivicConnect helps you report civic issues, track status, and connect with city departments.
+        City helps you report civic issues, track status, and connect with city departments.
         <br />
         {user
           ? <span style={{ color: theme.accent, fontWeight: 800 }}>
