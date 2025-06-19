@@ -1021,7 +1021,10 @@ function PleaseLogin({ nav, what }) {
  * const GOOGLE_MAPS_API_KEY = "AIzaSyAh45zSQ_-TvIwvHfPVhCG31a0ttZatp2E";
  */
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * IssueReportForm: Modern, responsive, accessible, and visually enhanced form for reporting civic issues.
+ */
 function IssueReportForm({ onReport, nav }) {
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
@@ -1029,59 +1032,58 @@ function IssueReportForm({ onReport, nav }) {
   const [photo, setPhoto] = useState(null);
   const [photoData, setPhotoData] = useState(null);
   const [location, setLocation] = useState('');
-  const [status, setStatus] = useState('');
+  const [error, setError] = useState('');
   const [loadingLoc, setLoadingLoc] = useState(false);
+  const [statusMsg, setStatusMsg] = useState('');
 
-  // Device Geolocation via browser API.
-  // Uses device-level (browser) Geolocation only!
+  // Field-specific error state for real-time feedback
+  const [touched, setTouched] = useState({});
+
+  // Device Geolocation via browser API (for autofill)
   async function fetchLocation() {
-    setStatus("");
+    setStatusMsg('');
     setLoadingLoc(true);
 
-    // Check Permissions API first, for accurate permission status
     const hasPermAPI = typeof navigator.permissions !== "undefined" && navigator.permissions.query;
     try {
       if (hasPermAPI) {
         const permStatus = await navigator.permissions.query({ name: "geolocation" });
         if (permStatus.state === "denied") {
-          setStatus("Location permission is denied in your browser settings. Please enable location access for autofill.");
+          setStatusMsg("Location permission is denied in your browser settings. Please enable location access for autofill.");
           setLoadingLoc(false);
           return;
         }
       }
-    } catch (e) {
-      // Permissions API failed, ignore and proceed
-    }
+    } catch (e) {}
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const coords = `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`;
           setLocation(coords);
-          setStatus("Device location detected. You may edit or keep as is.");
+          setStatusMsg("Device location detected. You may edit or keep as is.");
           setLoadingLoc(false);
         },
         (err) => {
-          // Check permission state via Permissions API if possible
           if (err.code === err.PERMISSION_DENIED || err.code === 1) {
-            // Check if browser explicitly says denied, else ask user to check
-            setStatus("Permission denied. Please check your browser settings and reload the page. If already allowed, you may need to clear site data.");
+            setStatusMsg("Permission denied. Please check your browser settings and reload the page. If already allowed, you may need to clear site data.");
           } else if (err.code === err.POSITION_UNAVAILABLE || err.code === 2) {
-            setStatus("Location unavailable. Try moving to an open area or check your device settings.");
+            setStatusMsg("Location unavailable. Try moving to an open area or check your device settings.");
           } else if (err.code === err.TIMEOUT || err.code === 3) {
-            setStatus("Location timeout. Please try again or enter location manually.");
+            setStatusMsg("Location timeout. Please try again or enter location manually.");
           } else {
-            setStatus("Could not obtain geolocation. Please enter location manually.");
+            setStatusMsg("Could not obtain geolocation. Please enter location manually.");
           }
           setLoadingLoc(false);
         },
         { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
       );
     } else {
-      setStatus("Geolocation API not supported in your browser.");
+      setStatusMsg("Geolocation API not supported in your browser.");
       setLoadingLoc(false);
     }
   }
+
   // Handle photo preview
   function handlePhoto(e) {
     const file = e.target.files[0];
@@ -1094,12 +1096,33 @@ function IssueReportForm({ onReport, nav }) {
       setPhotoData(null);
     }
   }
+
+  // Validators
+  function validate() {
+    if (!title.trim() || !desc.trim() || !type.trim()) {
+      setError('Please fill all required fields.');
+      return false;
+    }
+    if (title.length < 4) {
+      setError('Title must be at least 4 characters.');
+      return false;
+    }
+    if (desc.length < 8) {
+      setError('Description must be at least 8 characters.');
+      return false;
+    }
+    setError('');
+    return true;
+  }
+
+  function handleBlur(field) {
+    setTouched((old) => ({ ...old, [field]: true }));
+  }
+
+  // Main submit
   function submit(e) {
     e.preventDefault();
-    if (!(title && desc && type)) {
-      setStatus('Please fill all required fields.');
-      return;
-    }
+    if (!validate()) return;
     const reporting = {
       title: sanitize(title),
       desc: sanitize(desc),
@@ -1109,59 +1132,428 @@ function IssueReportForm({ onReport, nav }) {
     };
     onReport(reporting);
   }
+
+  // Mobile detection for layout tweaks
+  const isMobile = typeof window !== "undefined"
+    ? window.innerWidth < 700
+    : false;
+
+  // Enhanced UI
+  const formContainerStyle = {
+    maxWidth: 480,
+    width: "100%",
+    margin: "0 auto",
+    boxShadow: "0 3px 38px #14532d28, 0 0 0 2.8px #a68a6415",
+    background: "linear-gradient(116deg, #231f20 0%, #121212 80%, #14532d66 100%)",
+    borderRadius: 17,
+    padding: isMobile ? "28px 7vw 27px 7vw" : "44px 34px 38px 34px",
+    border: "2.6px solid #231f20",
+    display: "flex",
+    flexDirection: "column",
+    gap: isMobile ? 18 : 30,
+    position: "relative"
+  };
+
+  const fieldGroupStyle = {
+    marginBottom: isMobile ? 10 : 18
+  };
+
+  const floatLabelGroup = {
+    position: "relative",
+    marginBottom: isMobile ? 15 : 22,
+    width: "100%"
+  };
+
+  // Color icons for field indication
+  const fieldIcons = {
+    title: "📝",
+    desc: "📄",
+    type: "📂",
+    photo: "📷",
+    location: "📍"
+  };
+  const themeGreen = "#14532d";
+  const brown = "#a68a64";
+  const inputFocus = "#308865";
+  const errorCol = "#9a4218";
+
+  // Input, label styling
+  const inpBase = {
+    width: "100%",
+    fontSize: "1.12rem",
+    borderRadius: 8,
+    border: "1.7px solid #57442d98",
+    background: "#181c18cc",
+    color: "#fff",
+    padding: "18px 13px 10px 42px",
+    outline: "none",
+    transition: "border 0.17s, box-shadow 0.19s",
+    fontWeight: 500,
+    marginBottom: 0,
+    boxSizing: "border-box"
+  };
+  const labelFloat = {
+    position: "absolute",
+    left: 39,
+    top: 14,
+    fontSize: "1.06rem",
+    color: "#a68a64",
+    fontWeight: 600,
+    pointerEvents: "none",
+    zIndex: 10,
+    background:
+      "linear-gradient(92deg, #121212 70%, #231f20 100%)",
+    padding: "0 5px",
+    borderRadius: 4,
+    transition: "all 0.17s",
+    opacity: 0.77,
+    letterSpacing: ".014em"
+  };
+  const inpError = {
+    border: `2px solid ${errorCol}`,
+    background: "#271c1ccc"
+  };
+  const errorMsgStyle = {
+    color: errorCol,
+    fontWeight: 600,
+    fontSize: 15,
+    marginTop: 5,
+    marginBottom: 3,
+    textShadow: "0 2px 10px #231f2019"
+  };
+
+  // Large field icons
+  const iconStyle = {
+    position: "absolute",
+    left: 13,
+    top: 14,
+    fontSize: 23,
+    opacity: 0.82,
+    zIndex: 11
+  };
+
+  // Photo field style
+  const photoField = {
+    display: "flex",
+    flexDirection: isMobile ? "column" : "row",
+    alignItems: isMobile ? "flex-start" : "center",
+    gap: isMobile ? 13 : 18,
+    marginTop: 2,
+    marginBottom: 2
+  };
+
+  // Action buttons layout
+  const btnRow = {
+    display: 'flex',
+    flexDirection: isMobile ? 'column' : 'row',
+    gap: isMobile ? 15 : 24,
+    marginTop: 18
+  };
+
+  // Accessibility: group fields
   return (
     <section>
-      <h2>Report an Issue</h2>
-      <form onSubmit={submit} style={formStyle}>
-        <FormField label="Title" type="text"
-          value={title} onChange={e=>setTitle(e.target.value)} required maxLength={40}/>
-        <FormField label="Description" type="textarea"
-          value={desc} onChange={e=>setDesc(e.target.value)} required maxLength={160}/>
-        <FormField label="Type" type="select"
-          value={type} onChange={e=>setType(e.target.value)}
-          options={['Pothole', 'Streetlight', 'Garbage', 'Water Leak', 'Other']} />
-        <div style={{margin:'8px 0'}}>
-          <label style={labelStyle}>
-            Photo (optional):
-            <input type="file" accept="image/*"
-                style={{marginLeft:10}} onChange={handlePhoto} />
-          </label>
-          {photoData && (
-            <img src={photoData} alt="Preview"
-                 style={{maxWidth:80,maxHeight:80,border:'1px solid #00ffff',marginTop:8}} />
-          )}
-        </div>
-        <div style={{margin:'8px 0'}}>
-          <label style={labelStyle}>
-            Location:
+      <h2
+        style={{
+          fontWeight: 900,
+          fontSize: isMobile ? "2rem" : "2.7rem",
+          color: brown,
+          marginBottom: 3,
+          letterSpacing: '.04em',
+          textAlign: 'center',
+          textShadow: "0 2px 28px #14532d28"
+        }}
+      >
+        <span aria-hidden="true" style={{fontSize: "1.4em"}}>🛠️ </span>
+        Report an Issue
+      </h2>
+      <form
+        onSubmit={submit}
+        style={formContainerStyle}
+        aria-label="Civic Issue Report Form"
+        autoComplete="off"
+      >
+        {/* Title field */}
+        <div style={fieldGroupStyle}>
+          <div style={floatLabelGroup}>
+            <span style={iconStyle} aria-hidden="true">{fieldIcons.title}</span>
             <input
               type="text"
-              value={location}
-              onChange={e=>setLocation(e.target.value)}
-              placeholder="Click to autofill"
-              style={{marginLeft:8,minWidth:120}}
-              maxLength={96}
-              aria-label="Issue location"
+              id="report-title"
+              style={{
+                ...inpBase,
+                ...(touched.title && (!title || title.length < 4) ? inpError : {}),
+                boxShadow: touched.title && (!title || title.length < 4)
+                  ? "0 2px 10px #9a421820"
+                  : "0 2px 10px #14532d22"
+              }}
+              maxLength={40}
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              onBlur={() => handleBlur("title")}
+              placeholder=" "
+              required
+              aria-required="true"
+              aria-invalid={touched.title && (!title || title.length < 4)}
+              aria-describedby="title-err"
+              autoFocus
             />
-            <button
-              className="btn"
-              style={{marginLeft:12,padding:'6px 12px'}}
-              type="button"
-              onClick={fetchLocation}
-              disabled={loadingLoc}
-              aria-label="Fetch device location"
+            <label
+              htmlFor="report-title"
+              style={{
+                ...labelFloat,
+                top: (title || document.activeElement === document.getElementById("report-title")) ? -18 : 14,
+                fontSize: (title || document.activeElement === document.getElementById("report-title")) ? '0.92rem' : '1.06rem',
+                color: (touched.title && (!title || title.length < 4)) ? errorCol : brown,
+                opacity: (title || document.activeElement === document.getElementById("report-title")) ? 1 : .85,
+                fontWeight: (title || document.activeElement === document.getElementById("report-title")) ? 800 : 600,
+                background: (title || document.activeElement === document.getElementById("report-title")) ?
+                  "linear-gradient(91deg, #271f1a 70%, #14532d88 100%)" :
+                  labelFloat.background
+              }}
             >
-              {loadingLoc ? "Detecting..." : "Autofill"}
-            </button>
-          </label>
-          <div style={{fontSize:13, color:"#aaf", marginTop:4}}>
-            For privacy, only your coordinates will be stored, not a full address. 
+              Title (required)
+            </label>
+            {touched.title && (!title || title.length < 4)
+              && <div id="title-err" style={errorMsgStyle}>
+                Title is required (min 4 chars)
+              </div>
+            }
           </div>
         </div>
-        <button className="btn btn-large" type="submit">Submit Issue</button>
-        <button className="btn" type="button" style={{marginLeft:12}} onClick={()=>nav('home')}>Cancel</button>
+
+        {/* Description field */}
+        <div style={fieldGroupStyle}>
+          <div style={floatLabelGroup}>
+            <span style={iconStyle} aria-hidden="true">{fieldIcons.desc}</span>
+            <textarea
+              id="report-desc"
+              style={{
+                ...inpBase,
+                minHeight: 76,
+                resize: 'vertical',
+                ...(touched.desc && (!desc || desc.length < 8) ? inpError : {}),
+                paddingTop: 18
+              }}
+              maxLength={160}
+              value={desc}
+              onChange={e => setDesc(e.target.value)}
+              onBlur={() => handleBlur("desc")}
+              placeholder=" "
+              required
+              aria-required="true"
+              aria-invalid={touched.desc && (!desc || desc.length < 8)}
+              aria-describedby="desc-err"
+            />
+            <label
+              htmlFor="report-desc"
+              style={{
+                ...labelFloat,
+                top: (desc || document.activeElement === document.getElementById("report-desc")) ? -18 : 14,
+                fontSize: (desc || document.activeElement === document.getElementById("report-desc")) ? '0.91rem' : '1.06rem',
+                color: (touched.desc && (!desc || desc.length < 8)) ? errorCol : brown,
+                opacity: (desc || document.activeElement === document.getElementById("report-desc")) ? 1 : .85,
+                fontWeight: (desc || document.activeElement === document.getElementById("report-desc")) ? 800 : 600,
+                background: (desc || document.activeElement === document.getElementById("report-desc"))
+                  ? "linear-gradient(91deg, #271f1a 70%, #14532d77 100%)"
+                  : labelFloat.background
+              }}
+            >
+              Description (required)
+            </label>
+            <div style={{ color: "#597f95", fontSize: 12, marginTop: 4 }}>
+              Briefly describe the issue (max 160 chars)
+            </div>
+            {touched.desc && (!desc || desc.length < 8)
+              && <div id="desc-err" style={errorMsgStyle}>
+                Description is required (min 8 chars)
+              </div>}
+          </div>
+        </div>
+
+        {/* Type */}
+        <div style={fieldGroupStyle}>
+          <div style={floatLabelGroup}>
+            <span style={iconStyle} aria-hidden="true">{fieldIcons.type}</span>
+            <select
+              id="report-type"
+              style={{
+                ...inpBase,
+                ...(touched.type && !type ? inpError : { border: `1.7px solid ${brown}` }),
+                cursor: "pointer",
+                paddingLeft: "41px",
+                backgroundColor: "#191b1844",
+                color: "#d6cab3"
+              }}
+              value={type}
+              onChange={e => setType(e.target.value)}
+              onBlur={() => handleBlur("type")}
+              required
+              aria-label="Issue type"
+              aria-required="true"
+              aria-describedby="type-err"
+            >
+              {['Pothole', 'Streetlight', 'Garbage', 'Water Leak', 'Other'].map(opt =>
+                <option value={opt} key={opt}>{opt}</option>
+              )}
+            </select>
+            <label
+              htmlFor="report-type"
+              style={{
+                ...labelFloat,
+                top: -18,
+                left: 39,
+                color: brown,
+                opacity: 1,
+                fontWeight: 800,
+                fontSize: "0.94rem",
+                background: "linear-gradient(91deg, #271f1a 70%, #a68a6466 100%)"
+              }}
+            >
+              Type
+            </label>
+          </div>
+        </div>
+
+        {/* Photo */}
+        <div style={{...photoField, marginBottom: 13, marginTop:6}}>
+          <span aria-label="Attach Photo" style={{ fontSize: 22, color: themeGreen, marginRight: 7 }}>{fieldIcons.photo}</span>
+          <span style={{ color: "#bfa573", fontWeight: 500 }}>Photo (optional) </span>
+          <input
+            type="file"
+            accept="image/*"
+            style={{
+              border: "none",
+              background: "none",
+              color: "#cabfa4",
+              fontSize: 14
+            }}
+            id="photo-input"
+            onChange={handlePhoto}
+            aria-label="Attach a photo"
+          />
+          {photoData && (
+            <img
+              src={photoData}
+              alt="Preview"
+              style={{
+                maxWidth: 88,
+                maxHeight: 88,
+                border: `2.1px solid ${themeGreen}`,
+                borderRadius: 8,
+                marginTop: isMobile ? 8 : undefined
+              }}
+            />
+          )}
+        </div>
+
+        {/* Location Field */}
+        <div style={fieldGroupStyle}>
+          <div style={floatLabelGroup}>
+            <span style={iconStyle} aria-hidden="true">{fieldIcons.location}</span>
+            <input
+              type="text"
+              id="report-location"
+              style={{
+                ...inpBase,
+                paddingLeft: "42px",
+                border: `1.7px solid ${themeGreen}`,
+                background: "#232c22dd",
+                color: "#dff3c6"
+              }}
+              value={location}
+              onChange={e => setLocation(e.target.value)}
+              onBlur={() => handleBlur("location")}
+              placeholder="Lat, Long or description"
+              aria-label="Issue location"
+              maxLength={96}
+              autoComplete="off"
+              aria-describedby="location-help"
+            />
+            <label
+              htmlFor="report-location"
+              style={{
+                ...labelFloat,
+                left: 39,
+                top: -18,
+                color: themeGreen,
+                fontSize: "0.94rem",
+                opacity: 1,
+                fontWeight: 800,
+                background: "linear-gradient(91deg, #181c1a 70%, #14532dcc 100%)"
+              }}
+            >
+              Location <span style={{ fontSize:'89%', color:'#9bcfa1' }}>(optional)</span>
+            </label>
+            <button
+              type="button"
+              onClick={fetchLocation}
+              className="btn"
+              style={{
+                marginTop: 7,
+                marginLeft: 3,
+                padding: '6px 20px',
+                fontWeight: 700,
+                color: "#121212",
+                background: loadingLoc ? "#bda67f88" : "#d7ffa7",
+                border: `2px solid ${themeGreen}`,
+                borderRadius: 7,
+                letterSpacing: ".015em",
+                minWidth: 110
+              }}
+              aria-label="Autofill location using device"
+              disabled={loadingLoc}
+            >
+              {loadingLoc
+                ? <><span role="img" aria-label="loading">⏳</span> Detecting...</>
+                : <><span role="img" aria-label="location">📡</span> Autofill</>
+              }
+            </button>
+            <div id="location-help" style={{ fontSize: 13, color: "#93ffa9", marginTop: 6 }}>
+              For privacy, only coordinates are stored, not a full address.
+            </div>
+          </div>
+        </div>
+
+        {/* Error / Status */}
+        {(error || statusMsg) && (
+          <div style={error ? errorMsgStyle : { color: "#308865", fontWeight: 600, fontSize: 15, marginTop: 4, marginBottom: 2 }}>
+            {error || statusMsg}
+          </div>
+        )}
+
+        {/* Action buttons */}
+        <div style={btnRow}>
+          <Button
+            type="submit"
+            variant="primary"
+            size="large"
+            style={{
+              minWidth: 180,
+              fontWeight: 900,
+              background: "linear-gradient(92deg, #14532d 60%, #a68a64 130%)",
+              color: "#fff"
+            }}
+          >
+            <span aria-hidden="true" style={{ fontSize: 18, marginRight: 7 }}>🚀</span>
+            Submit Issue
+          </Button>
+          <Button
+            type="button"
+            onClick={() => nav('home')}
+            variant="secondary"
+            size="large"
+            style={{
+              minWidth: 120,
+              fontWeight: 700,
+              color: "#a68a64"
+            }}
+          >
+            <span aria-hidden="true" style={{ fontSize: 15, marginRight: 6 }}>↩️</span>
+            Cancel
+          </Button>
+        </div>
       </form>
-      {status && <div style={{marginTop:12, color:'#ff7070'}}>{status}</div>}
     </section>
   );
 }
