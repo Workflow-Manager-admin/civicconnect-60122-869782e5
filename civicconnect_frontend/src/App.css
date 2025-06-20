@@ -1,0 +1,251 @@
+:root {
+  --primary: #000000;
+  --secondary: #ff0000;
+  --accent: #ffffff;
+  --navbar-height: 64px;
+  --footer-height: 54px;
+  --border-radius: 8px;
+  --input-bg: #191919;
+  --input-border: #333;
+  --card-bg: #181818;
+  --elevate: 0 2px 16px rgba(0,0,0,0.18);
+}
+
+body {
+  margin: 0;
+  background: var(--primary);
+  color: var(--accent);
+  font-family: "Inter", "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--primary);
+  color: var(--accent);
+}
+
+.main-content {
+  padding-top: var(--navbar-height);
+  padding-bottom: var(--footer-height);
+  flex: 1;
+  min-height: 80vh;
+  background: var(--primary);
+  box-sizing: border-box;
+}
+
+.navbar {
+  background: var(--primary);
+  color: var(--accent);
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 100;
+  height: var(--navbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #222;
+  box-shadow: var(--elevate);
+  padding: 0 1.4rem;
+}
+
+.navbar .logo {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: var(--secondary);
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar .nav-links {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.navbar .nav-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 7px 13px;
+  border-radius: 4px;
+  transition: background 0.17s;
+}
+
+.navbar .nav-link.active, .navbar .nav-link:hover {
+  background: var(--secondary);
+  color: var(--primary);
+}
+
+.navbar .profile-name {
+  color: var(--accent);
+  margin-left: 1.1rem;
+  font-size: 1rem;
+}
+
+.footer {
+  background: var(--primary);
+  color: var(--accent);
+  border-top: 1px solid #333;
+  height: var(--footer-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.93rem;
+  text-align: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  box-sizing: border-box;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 2rem 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--elevate);
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--secondary);
+  margin-top: 0;
+  font-family: inherit;
+}
+
+a {
+  color: var(--secondary);
+}
+
+.btn, button[type="submit"], .secondary-btn {
+  font-size: 1rem;
+  padding: 0.65em 1.3em;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 12px;
+  display: inline-block;
+  border: none;
+  transition: all 0.16s;
+}
+
+.btn, button[type="submit"] {
+  background: var(--secondary);
+  color: var(--primary);
+  font-weight: 620;
+}
+.btn:disabled {
+  background: #555;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.btn:hover, button[type="submit"]:hover {
+  background: #cc0000;
+  color: var(--accent);
+}
+
+.secondary-btn {
+  background: none;
+  color: var(--secondary);
+  border: 1.6px solid var(--secondary);
+}
+.secondary-btn:hover {
+  background: var(--secondary);
+  color: var(--primary);
+}
+
+label {
+  color: var(--accent);
+  font-size: 1em;
+  margin-bottom: 0.5em;
+  font-weight: 520;
+  display: block;
+}
+
+input, select, textarea {
+  padding: 0.8em;
+  font-size: 1.01em;
+  border-radius: 4px;
+  border: 1.5px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--accent);
+  margin-bottom: 18px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  transition: border 0.21s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border: 1.5px solid var(--secondary);
+}
+
+input[type="file"] {
+  color: var(--accent);
+}
+
+.form-error {
+  color: #ff8282;
+  font-size: 0.98em;
+  margin-bottom: 10px;
+}
+
+.form-success {
+  color: #0bc254;
+  font-size: 0.98em;
+  margin-bottom: 10px;
+}
+
+.issue-status {
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 0.99em;
+}
+.issue-status.open {
+  background: #ff4e36;
+  color: #fff;
+}
+.issue-status.in_progress {
+  background: #dbbb0e;
+  color: #232323;
+}
+.issue-status.resolved {
+  background: #10be63;
+  color: #fff;
+}
+
+@media (max-width: 650px) {
+  .navbar .nav-links {
+    gap: 0.8rem;
+  }
+  .container {
+    padding: 1.2rem 0.5rem;
+  }
+  .card {
+    padding: 1rem 0.7rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .footer {
+    font-size: 0.8rem;
+    padding: 3px;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background: #1a1a1a;
+}
+::-webkit-scrollbar-thumb {
+  background: #181818;
+}

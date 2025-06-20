@@ -1,0 +1,982 @@
+
+> react-kavia@0.1.0 start
+> cross-env EDIT_MODE=true webpack serve --config .ve/webpack.config.js --mode development
+
+<i> [webpack-dev-server] Project is running at:
+<i> [webpack-dev-server] Loopback: http://localhost:3000/, http://[::1]:3000/
+<i> [webpack-dev-server] On Your Network (IPv4): http://172.17.0.2:3000/
+<i> [webpack-dev-server] Content not from webpack is served from './public' directory
+Injecting EditorRootWrapper import: ../.ve/EditorRootWrapper
+asset bundle.js 1.39 MiB [emitted] (name: main)
+asset index.html 1.98 KiB [emitted]
+runtime modules 27.5 KiB 14 modules
+modules by path ./node_modules/ 1.24 MiB 31 modules
+modules by path ./src/ 10.3 KiB
+  modules by path ./src/*.css 7.49 KiB 4 modules
+  modules by path ./src/*.js 2.76 KiB
+    ./src/index.js 530 bytes [built] [code generated]
+    ./src/App.js 2.24 KiB [built] [code generated]
+modules by path ./.ve/ 15.1 KiB
+  modules by path ./.ve/*.js 10.6 KiB 2 modules
+  modules by path ./.ve/*.css 2.93 KiB
+    ./.ve/EditorOverlay.css 2.25 KiB [built] [code generated]
+    ./node_modules/css-loader/dist/cjs.js!./.ve/EditorOverlay.css 697 bytes [built] [code generated]
+  ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 1235 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.4 MiB
+  asset bundle.js 1.39 MiB [emitted] (name: main)
+  asset main.18e3aa5a1adeaf9cdf2f.hot-update.js 12.7 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.18e3aa5a1adeaf9cdf2f.hot-update.json 97 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.4 MiB = bundle.js 1.39 MiB main.18e3aa5a1adeaf9cdf2f.hot-update.js 12.7 KiB
+cached modules 1.26 MiB [cached] 39 modules
+runtime modules 27.5 KiB 14 modules
+./src/App.js 4.51 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 3:0-41
+Module not found: Error: Can't resolve './components/Navbar' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 4:0-41
+Module not found: Error: Can't resolve './components/Footer' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 5:0-32
+Module not found: Error: Can't resolve './pages/Home' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 6:0-34
+Module not found: Error: Can't resolve './pages/Login' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 7:0-40
+Module not found: Error: Can't resolve './pages/Register' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 8:0-46
+Module not found: Error: Can't resolve './pages/ReportIssue' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 14:0-62
+Module not found: Error: Can't resolve './context/AuthContext' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+13 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 13 errors in 128 ms
+Injecting EditorRootWrapper import: ../.ve/EditorRootWrapper
+assets by path *.js 1.39 MiB
+  asset bundle.js 1.39 MiB [emitted] (name: main)
+  asset main.ef0d1c44ecb008d31955.hot-update.js 854 bytes [emitted] [immutable] [hmr] (name: main)
+asset index.html 1.98 KiB [emitted]
+asset main.ef0d1c44ecb008d31955.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.39 MiB = bundle.js 1.39 MiB main.ef0d1c44ecb008d31955.hot-update.js 854 bytes
+cached modules 1.25 MiB [cached] 35 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 17.2 KiB
+  modules by path ./.ve/ 12.2 KiB
+    ./.ve/EditorRootWrapper.js 2.68 KiB [built]
+    ./.ve/EditorOverlay.jsx 1.58 KiB [built]
+    ./.ve/SidePanel.js 7.93 KiB [built]
+  modules by path ./src/*.js 5.02 KiB
+    ./src/index.js 530 bytes [built]
+    ./src/App.js 4.51 KiB [built]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 3:0-41
+Module not found: Error: Can't resolve './components/Navbar' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 4:0-41
+Module not found: Error: Can't resolve './components/Footer' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 5:0-32
+Module not found: Error: Can't resolve './pages/Home' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 6:0-34
+Module not found: Error: Can't resolve './pages/Login' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 7:0-40
+Module not found: Error: Can't resolve './pages/Register' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 8:0-46
+Module not found: Error: Can't resolve './pages/ReportIssue' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 14:0-62
+Module not found: Error: Can't resolve './context/AuthContext' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+13 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 13 errors in 184 ms
+Injecting EditorRootWrapper import: ../.ve/EditorRootWrapper
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.39 MiB
+  asset bundle.js 1.39 MiB [emitted] (name: main)
+  asset main.e0e9c8994ef6a21858c3.hot-update.js 854 bytes [emitted] [immutable] [hmr] (name: main)
+asset main.e0e9c8994ef6a21858c3.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.39 MiB = bundle.js 1.39 MiB main.e0e9c8994ef6a21858c3.hot-update.js 854 bytes
+cached modules 1.26 MiB [cached] 39 modules
+runtime modules 27.5 KiB 14 modules
+./src/index.js 530 bytes [built]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 3:0-41
+Module not found: Error: Can't resolve './components/Navbar' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 4:0-41
+Module not found: Error: Can't resolve './components/Footer' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 5:0-32
+Module not found: Error: Can't resolve './pages/Home' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 6:0-34
+Module not found: Error: Can't resolve './pages/Login' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 7:0-40
+Module not found: Error: Can't resolve './pages/Register' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 8:0-46
+Module not found: Error: Can't resolve './pages/ReportIssue' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 14:0-62
+Module not found: Error: Can't resolve './context/AuthContext' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+13 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 13 errors in 36 ms
+assets by status 2.84 KiB [cached] 3 assets
+asset bundle.js 1.39 MiB [emitted] (name: main)
+Entrypoint main 1.39 MiB = bundle.js 1.39 MiB main.ef0d1c44ecb008d31955.hot-update.js 854 bytes
+cached modules 1.26 MiB [cached] 39 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 7.55 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/context/AuthContext.js 3.04 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 3:0-41
+Module not found: Error: Can't resolve './components/Navbar' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 4:0-41
+Module not found: Error: Can't resolve './components/Footer' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 5:0-32
+Module not found: Error: Can't resolve './pages/Home' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 6:0-34
+Module not found: Error: Can't resolve './pages/Login' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 7:0-40
+Module not found: Error: Can't resolve './pages/Register' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 8:0-46
+Module not found: Error: Can't resolve './pages/ReportIssue' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+12 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 12 errors in 63 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.42 MiB
+  asset bundle.js 1.4 MiB [emitted] (name: main)
+  asset main.1f63535d4582f0346481.hot-update.js 18.8 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.1f63535d4582f0346481.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.42 MiB = bundle.js 1.4 MiB main.1f63535d4582f0346481.hot-update.js 18.8 KiB
+cached modules 1.26 MiB [cached] 40 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 7.37 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/components/Navbar.js 2.87 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 4:0-41
+Module not found: Error: Can't resolve './components/Footer' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 5:0-32
+Module not found: Error: Can't resolve './pages/Home' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 6:0-34
+Module not found: Error: Can't resolve './pages/Login' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 7:0-40
+Module not found: Error: Can't resolve './pages/Register' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 8:0-46
+Module not found: Error: Can't resolve './pages/ReportIssue' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+12 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 12 errors in 61 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.41 MiB
+  asset bundle.js 1.4 MiB [emitted] (name: main)
+  asset main.140be57f2b920a8b0c75.hot-update.js 13.7 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.140be57f2b920a8b0c75.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.41 MiB = bundle.js 1.4 MiB main.140be57f2b920a8b0c75.hot-update.js 13.7 KiB
+cached modules 1.26 MiB [cached] 41 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 4.82 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/components/Footer.js 318 bytes [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 5:0-32
+Module not found: Error: Can't resolve './pages/Home' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 6:0-34
+Module not found: Error: Can't resolve './pages/Login' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 7:0-40
+Module not found: Error: Can't resolve './pages/Register' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 8:0-46
+Module not found: Error: Can't resolve './pages/ReportIssue' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+11 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 11 errors in 36 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.42 MiB
+  asset bundle.js 1.4 MiB [emitted] (name: main)
+  asset main.b0073b83fef400976e5a.hot-update.js 15.5 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.b0073b83fef400976e5a.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.42 MiB = bundle.js 1.4 MiB main.b0073b83fef400976e5a.hot-update.js 15.5 KiB
+cached modules 1.26 MiB [cached] 42 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 6.14 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/pages/Home.js 1.64 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 6:0-34
+Module not found: Error: Can't resolve './pages/Login' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 7:0-40
+Module not found: Error: Can't resolve './pages/Register' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 8:0-46
+Module not found: Error: Can't resolve './pages/ReportIssue' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+10 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 10 errors in 44 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.43 MiB
+  asset bundle.js 1.41 MiB [emitted] (name: main)
+  asset main.bcb3fa04666a059bbded.hot-update.js 17.9 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.bcb3fa04666a059bbded.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.43 MiB = bundle.js 1.41 MiB main.bcb3fa04666a059bbded.hot-update.js 17.9 KiB
+cached modules 1.27 MiB [cached] 43 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 7.93 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/pages/Login.js 3.42 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 7:0-40
+Module not found: Error: Can't resolve './pages/Register' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 8:0-46
+Module not found: Error: Can't resolve './pages/ReportIssue' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Login.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 6:0-34 61:41-46
+ @ ./src/index.js 5:0-24 11:32-35
+
+10 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 10 errors in 71 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.43 MiB
+  asset bundle.js 1.42 MiB [emitted] (name: main)
+  asset main.04b023bb6be0050d58fa.hot-update.js 19.5 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.04b023bb6be0050d58fa.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.43 MiB = bundle.js 1.42 MiB main.04b023bb6be0050d58fa.hot-update.js 19.5 KiB
+cached modules 1.27 MiB [cached] 44 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 9.24 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/pages/Register.js 4.74 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 8:0-46
+Module not found: Error: Can't resolve './pages/ReportIssue' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Login.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 6:0-34 61:41-46
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Register.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 7:0-40 67:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+10 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 10 errors in 57 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.45 MiB
+  asset bundle.js 1.43 MiB [emitted] (name: main)
+  asset main.98bfd4399683656ceb23.hot-update.js 22.3 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.98bfd4399683656ceb23.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.45 MiB = bundle.js 1.43 MiB main.98bfd4399683656ceb23.hot-update.js 22.3 KiB
+cached modules 1.27 MiB [cached] 45 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 12.1 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/pages/ReportIssue.js 7.55 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 9:0-40
+Module not found: Error: Can't resolve './pages/MyIssues' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Login.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 6:0-34 61:41-46
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Register.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 7:0-40 67:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/ReportIssue.js 2:0-47
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 8:0-46 75:44-55
+ @ ./src/index.js 5:0-24 11:32-35
+
+10 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 10 errors in 88 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.45 MiB
+  asset bundle.js 1.43 MiB [emitted] (name: main)
+  asset main.948cb399f6825722787b.hot-update.js 19 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.948cb399f6825722787b.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.45 MiB = bundle.js 1.43 MiB main.948cb399f6825722787b.hot-update.js 19 KiB
+cached modules 1.28 MiB [cached] 46 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 9.06 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/pages/MyIssues.js 4.55 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 10:0-52
+Module not found: Error: Can't resolve './pages/AdminDashboard' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Login.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 6:0-34 61:41-46
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Register.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 7:0-40 67:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/ReportIssue.js 2:0-47
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 8:0-46 75:44-55
+ @ ./src/index.js 5:0-24 11:32-35
+
+9 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 9 errors in 59 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.47 MiB
+  asset bundle.js 1.44 MiB [emitted] (name: main)
+  asset main.24136f20fa2d7664255f.hot-update.js 23.5 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.24136f20fa2d7664255f.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.47 MiB = bundle.js 1.44 MiB main.24136f20fa2d7664255f.hot-update.js 23.5 KiB
+cached modules 1.29 MiB [cached] 47 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 12.8 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/pages/AdminDashboard.js 8.3 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 12:0-46
+Module not found: Error: Can't resolve './pages/Departments' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Login.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 6:0-34 61:41-46
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Register.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 7:0-40 67:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/ReportIssue.js 2:0-47
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 8:0-46 75:44-55
+ @ ./src/index.js 5:0-24 11:32-35
+
+8 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 8 errors in 84 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.47 MiB
+  asset bundle.js 1.45 MiB [emitted] (name: main)
+  asset main.8f97a78cafd843c5abc9.hot-update.js 17 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.8f97a78cafd843c5abc9.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.47 MiB = bundle.js 1.45 MiB main.8f97a78cafd843c5abc9.hot-update.js 17 KiB
+cached modules 1.29 MiB [cached] 48 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 7.72 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/pages/Departments.js 3.21 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 11:0-38
+Module not found: Error: Can't resolve './pages/Contact' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Login.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 6:0-34 61:41-46
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Register.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 7:0-40 67:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/ReportIssue.js 2:0-47
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 8:0-46 75:44-55
+ @ ./src/index.js 5:0-24 11:32-35
+
+7 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 7 errors in 46 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.47 MiB
+  asset bundle.js 1.45 MiB [emitted] (name: main)
+  asset main.b42c1a4a30c3f0870300.hot-update.js 15.9 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.b42c1a4a30c3f0870300.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.47 MiB = bundle.js 1.45 MiB main.b42c1a4a30c3f0870300.hot-update.js 15.9 KiB
+cached modules 1.3 MiB [cached] 49 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 6.91 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/pages/Contact.js 2.4 KiB [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/App.js 13:0-40
+Module not found: Error: Can't resolve './pages/NotFound' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Login.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 6:0-34 61:41-46
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Register.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 7:0-40 67:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/ReportIssue.js 2:0-47
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 8:0-46 75:44-55
+ @ ./src/index.js 5:0-24 11:32-35
+
+6 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 6 errors in 39 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 1.47 MiB
+  asset bundle.js 1.45 MiB [emitted] (name: main)
+  asset main.299b9fffa58ab2c39c21.hot-update.js 14 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.299b9fffa58ab2c39c21.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.47 MiB = bundle.js 1.45 MiB main.299b9fffa58ab2c39c21.hot-update.js 14 KiB
+cached modules 1.3 MiB [cached] 50 modules
+runtime modules 27.5 KiB 14 modules
+javascript modules 5.44 KiB
+  ./src/App.js 4.51 KiB [code generated]
+  ./src/pages/NotFound.js 958 bytes [built] [code generated]
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Login.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 6:0-34 61:41-46
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/NotFound.js 2:0-40
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 13:0-40 113:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Register.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 7:0-40 67:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/ReportIssue.js 2:0-47
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 8:0-46 75:44-55
+ @ ./src/index.js 5:0-24 11:32-35
+
+6 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 6 errors in 38 ms
+assets by status 1.46 MiB [cached] 2 assets
+cached modules 1.3 MiB (javascript) 27.5 KiB (runtime) [cached] 66 modules
+
+LOG from webpack.FileSystemInfo
+<w> Managed item /home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/node_modules/react-router-dom isn't a directory or doesn't contain a package.json (see snapshot.managedPaths option)
++ 13 hidden lines
+
+ERROR in ./src/App.js 2:0-84
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src'
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/components/Navbar.js 2:0-56
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/components'
+ @ ./src/App.js 3:0-41 46:37-43
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Login.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 6:0-34 61:41-46
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/NotFound.js 2:0-40
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 13:0-40 113:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/Register.js 3:0-53
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 7:0-40 67:41-49
+ @ ./src/index.js 5:0-24 11:32-35
+
+ERROR in ./src/pages/ReportIssue.js 2:0-47
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/civicconnect-60122-869782e5/civicconnect_frontend/src/pages'
+ @ ./src/App.js 8:0-46 75:44-55
+ @ ./src/index.js 5:0-24 11:32-35
+
+6 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.99.9 compiled with 6 errors in 27 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 2.16 MiB
+  asset bundle.js 1.79 MiB [emitted] (name: main)
+  asset main.89572840ee0972fd6efd.hot-update.js 385 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.89572840ee0972fd6efd.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.16 MiB = bundle.js 1.79 MiB main.89572840ee0972fd6efd.hot-update.js 385 KiB
+cached modules 1.28 MiB [cached] 46 modules
+runtime modules 28.7 KiB 15 modules
+javascript modules 331 KiB
+  modules by path ./src/ 24 KiB
+    modules by path ./src/pages/*.js 16.6 KiB
+      ./src/pages/Login.js 3.42 KiB [code generated]
+      ./src/pages/Register.js 4.74 KiB [code generated]
+      ./src/pages/ReportIssue.js 7.55 KiB [code generated]
+      ./src/pages/NotFound.js 958 bytes [code generated]
+    ./src/App.js 4.51 KiB [code generated]
+    ./src/components/Navbar.js 2.87 KiB [code generated]
+  built modules 307 KiB [built]
+    ./node_modules/react-router-dom/dist/index.js 55.4 KiB [built] [code generated]
+    ./node_modules/react-router/dist/index.js 59.3 KiB [built] [code generated]
+    ./node_modules/@remix-run/router/dist/router.js 193 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 183 ms
+Injecting EditorRootWrapper import: ../.ve/EditorRootWrapper
+assets by path *.js 1.79 MiB
+  asset bundle.js 1.79 MiB [emitted] (name: main)
+  asset main.42ac1de1cc686981fc65.hot-update.js 854 bytes [emitted] [immutable] [hmr] (name: main)
+asset index.html 1.98 KiB [emitted]
+asset main.42ac1de1cc686981fc65.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 1.79 MiB = bundle.js 1.79 MiB main.42ac1de1cc686981fc65.hot-update.js 854 bytes
+cached modules 1.55 MiB [cached] 38 modules
+runtime modules 28.7 KiB 15 modules
+javascript modules 60.2 KiB
+  modules by path ./src/ 48 KiB
+    modules by path ./src/pages/*.js 36.7 KiB 9 modules
+    modules by path ./src/*.js 5.02 KiB 2 modules
+    modules by path ./src/components/*.js 3.18 KiB
+      ./src/components/Navbar.js 2.87 KiB [built]
+      ./src/components/Footer.js 318 bytes [built]
+    ./src/context/AuthContext.js 3.04 KiB [built]
+  modules by path ./.ve/ 12.2 KiB
+    ./.ve/EditorRootWrapper.js 2.68 KiB [built]
+    ./.ve/EditorOverlay.jsx 1.58 KiB [built]
+    ./.ve/SidePanel.js 7.93 KiB [built]
+webpack 5.99.9 compiled successfully in 303 ms
